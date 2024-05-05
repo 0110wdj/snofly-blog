@@ -4,7 +4,7 @@ published: 2023-11-04
 description: ""
 image: "./logo.png"
 tags: ["webpack"]
-category: "入门"
+category: "前端入门"
 draft: false
 ---
 
