@@ -55,6 +55,11 @@ export const profileConfig: ProfileConfig = {
       icon: 'fa6-brands:github',
       url: 'https://github.com/0110wdj',
     },
+    {
+      name: 'leetcode',
+      icon: 'simple-icons:leetcode',
+      url: 'https://leetcode.cn/u/snofly/',
+    },
   ],
 }
 
