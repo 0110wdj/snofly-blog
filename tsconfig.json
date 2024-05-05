@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "/Users/liujie/Documents/gitBranch/snofly-blog",
     "strictNullChecks": true,
     "allowJs": true,
     "plugins": [
@@ -10,14 +10,32 @@
       }
     ],
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
-      "@constants/*": ["src/constants/*"],
-      "@utils/*": ["src/utils/*"],
-      "@i18n/*": ["src/i18n/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@/*": ["src/*"]
-    }
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@i18n/*": [
+        "src/i18n/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }
