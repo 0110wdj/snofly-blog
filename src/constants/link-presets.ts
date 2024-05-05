@@ -15,4 +15,12 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
     name: i18n(I18nKey.archive),
     url: '/archive/',
   },
+  [LinkPreset.Talk]: {
+    name: i18n(I18nKey.talk),
+    url: '/talk/',
+  },
+  [LinkPreset.Kits]: {
+    name: i18n(I18nKey.kits),
+    url: '/kits/',
+  },
 }

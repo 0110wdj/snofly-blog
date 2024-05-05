@@ -17,7 +17,7 @@ export type SiteConfig = {
 }
 
 export type Favicon = {
-  src: string,
+  src: string
   theme?: 'light' | 'dark'
   sizes?: string
 }
@@ -26,6 +26,8 @@ export enum LinkPreset {
   Home = 0,
   Archive = 1,
   About = 2,
+  Talk = 3,
+  Kits = 4,
 }
 
 export type NavBarLink = {

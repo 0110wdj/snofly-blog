@@ -2,6 +2,8 @@ enum I18nKey {
   home = 'home',
   about = 'about',
   archive = 'archive',
+  talk = 'talk',
+  kits = 'kits',
 
   tags = 'tags',
   categories = 'categories',
@@ -22,7 +24,7 @@ enum I18nKey {
 
   themeColor = 'themeColor',
 
-  lightMode =  'lightMode',
+  lightMode = 'lightMode',
   darkMode = 'darkMode',
   systemMode = 'systemMode',
 
