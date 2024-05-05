@@ -1,11 +1,11 @@
 ---
-import Layout from "./Layout.astro";
+import {siteConfig} from "@/config";
+import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
+import BackToTop from "@components/control/BackToTop.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import {pathsEqual} from "@utils/url-utils";
-import Footer from "@components/Footer.astro";
-import BackToTop from "@components/control/BackToTop.astro";
-import {siteConfig} from "@/config";
+import Layout from "./Layout.astro";
 
 interface Props {
     title: string;
@@ -19,7 +19,7 @@ const enableBanner = siteConfig.banner.enable
 
 ---
 
-<Layout title={title} banner={banner} description={description}>
+<Layout title={title} banner={banner+''} description={description}>
 <slot slot="head" name="head"></slot>
 <div class="max-w-[var(--page-width)] min-h-screen grid grid-cols-[17.5rem_auto] grid-rows-[auto_auto_1fr_auto] lg:grid-rows-[auto_1fr_auto]
     mx-auto gap-4 relative px-0 md:px-4"
