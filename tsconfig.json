@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": "/Users/liujie/Documents/gitBranch/snofly-blog",
+    "baseUrl": ".",
     "strictNullChecks": true,
     "allowJs": true,
     "plugins": [
