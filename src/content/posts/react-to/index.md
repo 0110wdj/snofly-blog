@@ -3,7 +3,7 @@ title: "React 入门引导：理论概述与示例演练"
 published: 2022-05-31
 description: ""
 image: ""
-tags: ["react"]
+tags: ["react", "翻译"]
 category: "前端入门"
 draft: false
 ---

@@ -3,7 +3,7 @@ title: "Redux 入门引导：理论概述与示例演练"
 published: 2023-08-08
 description: ""
 image: ""
-tags: ["redux"]
+tags: ["redux", "翻译"]
 category: "前端入门"
 draft: false
 ---

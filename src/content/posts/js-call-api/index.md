@@ -3,7 +3,7 @@ title: "使用 JavaScript 调用 API"
 published: 2023-01-04
 description: ""
 image: "./totoro.png"
-tags: ["js"]
+tags: ["js", "翻译"]
 category: "前端入门"
 draft: false
 ---

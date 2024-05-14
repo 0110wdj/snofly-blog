@@ -3,7 +3,7 @@ title: "React Router：单页应用程序实例"
 published: 2022-09-30
 description: ""
 image: ""
-tags: ["react"]
+tags: ["react", "翻译"]
 category: "前端入门"
 draft: false
 ---
