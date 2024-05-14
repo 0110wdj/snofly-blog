@@ -1,4 +1,5 @@
-import { Button, Input } from 'antd'
+import { Button, Input, message } from 'antd'
+import { Form, Modal, Table } from 'antd'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
@@ -7,7 +8,6 @@ const ipAddress = '47.97.71.176'
 /** 接口定义 */
 const getJSONData = async () => {
   try {
-    console.log('call getJSONData')
     return new Promise((resolve, reject) => {
       axios.get(`http://${ipAddress}:9527/blog/talkBoard/getInfo`).then(res => {
         if (res.status === 200) {
@@ -51,41 +51,34 @@ export default function TalkInner() {
   const [talkBoardInfo, setTalkBoardInfo] = useState([
     { message: '数据获取中...', name: '冰上飞熊', id: '11' },
   ])
-  /** flag 标志数组，1 表示已获取到数据 */
-  const [flagTalkBoard, setFlagTalkBoard] = useState(0)
   const [reload, setReload] = useState(0)
+  const [form] = Form.useForm()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const columns = [
+    {
+      title: '序号',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '时间',
+      dataIndex: 'time',
+      key: 'time',
+    },
+    {
+      title: '留言',
+      dataIndex: 'message',
+      key: 'message',
+    },
+  ]
 
   useEffect(() => {
-    setFlagTalkBoard(1)
-    getJSONData()
-      .then(data => {
-        setTalkBoardInfo(data)
-      })
-      .catch(() => {
-        setTalkBoardInfo([{ message: '数据获取失败', name: '冰上飞熊' }])
-      })
-  }, [])
-
-  /** 获取数据之前和之后的渲染 */
-  const TalkBoard = () => {
-    const getTalkBoardElement = data => {
-      return (
-        <div>
-          <span>留言板</span>
-          {data.map(({ message, name, id }) => {
-            return (
-              <div key={id}>
-                <message>{message}</message>
-                <name>—— {name}</name>
-              </div>
-            )
-          })}
-        </div>
-      )
-    }
-    // 先查询数据，再渲染组件
-    if (flagTalkBoard === 0) {
-      setFlagTalkBoard(1)
+    if (reload >= 0) {
       getJSONData()
         .then(data => {
           setTalkBoardInfo(data)
@@ -93,52 +86,107 @@ export default function TalkInner() {
         .catch(() => {
           setTalkBoardInfo([{ message: '数据获取失败', name: '冰上飞熊' }])
         })
-    } else {
-      return getTalkBoardElement(talkBoardInfo)
     }
-  }
+  }, [reload])
 
-  /** 表单提交 */
-  const handleSubmit = e => {
-    e.preventDefault()
-    const params = {
-      name: document.getElementById('name').value,
-      message: document.getElementById('message').value,
+  useEffect(() => {
+    if (isModalOpen === false) {
+      form.resetFields()
     }
-    if (params.message !== '' && params.name !== '') {
-      addMessageData(params)
-        .then(res => {
-          window.location.reload()
-        })
-        .catch(() => {
-          alert('添加失败')
-        })
-    } else {
-      window.alert('不能提交空白啊！')
-    }
+  }, [form, isModalOpen])
+
+  const submit = async () => {
+    const formData = await form.validateFields()
+    addMessageData(formData)
+      .then(res => {
+        setReload(r => r + 1)
+        setIsModalOpen(false)
+      })
+      .catch(() => {
+        message.error('添加失败')
+      })
   }
 
   return (
     <div>
-      {TalkBoard()}
       <div>
-        <input
-          id='message'
-          type='text'
-          name='message'
-          placeholder='请输入您的留言'
-          autocomplete='off'
-        />
-        <Button onClick={handleSubmit}>提交</Button>
-        <input
-          id='name'
-          type='text'
-          name='name'
-          placeholder='请输入您的姓名'
-          autocomplete='off'
-          defaultValue={'匿名'}
+        <Table
+          dataSource={talkBoardInfo}
+          columns={columns}
+          pagination={false}
         />
       </div>
+      {/* {TalkBoard()} */}
+      <div>
+        <Button
+          type='button'
+          class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+          onClick={() => {
+            setIsModalOpen(true)
+          }}
+        >
+          点击留言
+        </Button>
+      </div>
+      <Modal
+        title='留言板'
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={
+          <div>
+            <Button
+              type='button'
+              class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              onClick={submit}
+            >
+              提交
+            </Button>
+          </div>
+        }
+      >
+        <Form
+          form={form}
+          name='basic'
+          labelCol={{
+            span: 4,
+          }}
+          wrapperCol={{
+            span: 18,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          autoComplete='off'
+        >
+          <Form.Item
+            label='名称'
+            name='name'
+            placeholder='请输入您的姓名'
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label='内容'
+            name='message'
+            placeholder='请输入您的姓名'
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   )
 }
