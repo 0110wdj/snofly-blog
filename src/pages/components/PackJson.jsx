@@ -8,7 +8,7 @@ const PackJson = () => {
 
   return (
     <>
-      <h3>Base64-Pack-Json</h3>
+      <h3>Base64-Msgpack-Json</h3>
       <div class='flex flex-row'>
         <Input.TextArea
           value={base64}
