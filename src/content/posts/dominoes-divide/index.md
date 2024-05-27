@@ -36,52 +36,53 @@ draft: false
 
 对于合并步骤，我们假设有个函数 merge 来实现，具体实现可以先忽略。
 
-## 代码模板
-
-语言无所谓，用函数表示独立步骤的功能，就用 js 来实现了。
-
-模板：
+## 代码
 
 ```js
-// test case input data
-const L = [5, 4, 9, 7, 3, 11];
-const R = [8, 2, 6, 7, 9, 10];
-const W = [0, 1, 1, 0, 0, 1];
-
-// main function
-const dominoes_divide = (L, R, W) => {
-  const merge = ([ll, lr, lw], [rl, rr, rw]) => {
-    return [[], [], []];
-  };
-
-  const recur = (l, r, w) => {
-    if (l.length <= 1) {
-      return [l, r, w];
+function maxSumOfProducts(L, R) {
+  function helper(L, R, left, right) {
+    if (left === right) {
+      // 只有一块骨牌的情况
+      return { noRotate: 0, rotate: 0 }; // { 不旋转的最大值, 旋转的最大值 }
     }
-    if (l.length === 2) {
-      return solute(l, r, w);
-    }
-    const [ll, lr, lw, rl, rr, rw] = divide(l, r, w);
-    const leftMax = recur(ll, lr, lw);
-    const rightMax = recur(rl, rr, rw);
-    return merge(leftMax, rightMax);
-  };
 
-  return recur(L, R, W);
-};
+    const mid = Math.floor((left + right) / 2);
 
-console.log(dominoes_divide(L, R, W));
-// expected output data
-// rL:[5, 4, 6, 7, 3, 11]
-// rR:[8, 2, 9, 7, 9, 10]
-// rW:[0, 1, 0, 0, 0, 1]
-// rmax:227
-```
+    // 递归处理左右两部分
+    const leftResult = helper(L, R, left, mid);
+    const rightResult = helper(L, R, mid + 1, right);
 
-显然，只需要未完成各个功能函数即可。
+    // 左右两部分不旋转和旋转的结果
+    const maxLeftNoRotate = leftResult.noRotate;
+    const maxLeftRotate = leftResult.rotate;
+    const maxRightNoRotate = rightResult.noRotate;
+    const maxRightRotate = rightResult.rotate;
 
-## 完整代码
+    // 合并结果，计算跨越边界的最大值
+    const maxNoRotate = Math.max(
+      maxLeftNoRotate + R[mid] * L[mid + 1], // 左不旋转，右不旋转
+      maxLeftRotate + L[mid] * L[mid + 1] // 左旋转，右不旋转
+    );
+    const maxRotate = Math.max(
+      maxLeftNoRotate + R[mid] * R[mid + 1], // 左不旋转，右旋转
+      maxLeftRotate + L[mid] * R[mid + 1] // 左旋转，右旋转
+    );
 
-```js
-// coding
+    return {
+      noRotate: maxNoRotate + maxRightNoRotate,
+      rotate: maxRotate + maxRightRotate,
+    };
+  }
+
+  const n = L.length;
+  const result = helper(L, R, 0, n - 1);
+  return Math.max(result.noRotate, result.rotate);
+}
+
+// 示例输入
+const L = [5, 8, 4, 9, 3, 11];
+const R = [8, 4, 2, 6, 9, 10];
+
+const result = maxSumOfProducts(L, R);
+console.log("最大乘积和:", result);
 ```
