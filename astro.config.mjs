@@ -1,4 +1,8 @@
+import react from "@astrojs/react";
+import sitemap from '@astrojs/sitemap';
+import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
+import swup from '@swup/astro';
 import Compress from "astro-compress";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
@@ -8,10 +12,6 @@ import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
-import svelte from "@astrojs/svelte";
-import swup from '@swup/astro';
-import sitemap from '@astrojs/sitemap';
-import react from "@astrojs/react";
 const oklchToHex = str => {
   const DEFAULT_HUE = 250;
   const regex = /-?\d+(\.\d+)?/g;
@@ -25,7 +25,7 @@ const oklchToHex = str => {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://fuwari.vercel.app/",
+  site: "http://www.snofly.cn/",
   base: "/",
   trailingSlash: "always",
   integrations: [tailwind(), swup({
