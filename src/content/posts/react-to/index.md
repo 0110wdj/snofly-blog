@@ -245,7 +245,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 ```
 
-让我们再来创建 App 组件。之前，我们只是写了一个 h1 标签，现在添加一个 div 元素包裹 h1 标签，并设置 div className=“App”。值得注意的是，我们使用 clssName 代替了 claa。这是一个小提醒，说明这里的代码本质上是 JavaScript，而不是单纯的 HTML。
+让我们再来创建 App 组件。之前，我们只是写了一个 h1 标签，现在添加一个 div 元素包裹 h1 标签，并设置 div className=“App”。值得注意的是，我们使用 className 代替了 class。这是一个小提醒，说明这里的代码本质上是 JavaScript，而不是单纯的 HTML。
 
 ```js
 class App extends React.Component {
