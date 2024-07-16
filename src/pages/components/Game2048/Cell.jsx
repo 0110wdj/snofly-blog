@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Cell = ({ num, size, margin, x, y }) => {
   const getClassName = num => {
     switch (num) {

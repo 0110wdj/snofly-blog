@@ -1,7 +1,7 @@
 import { Select } from 'antd'
 import { useState } from 'react'
 import Craw from './components/Craw'
-import Game2048 from './components/Game2048'
+import Game2048 from './components/Game2048/Game2048'
 import Hex from './components/Hex'
 import HexString from './components/HexString'
 import PackJson from './components/PackJson'
@@ -35,7 +35,7 @@ const options = [
 ]
 
 export default function Home() {
-  const [selected, setSelected] = useState(['protobuf', 'packjson'])
+  const [selected, setSelected] = useState(['game2048'])
   return (
     <div class='flex flex-wrap flex-col items-center'>
       <h2>选择功能组件（请在 light 主题下使用）</h2>
