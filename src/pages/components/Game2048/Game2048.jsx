@@ -29,8 +29,6 @@ const Game = () => {
   })
   const [gameOver, setGameOver] = useState(false)
 
-  console.log('reload')
-
   useEffect(() => {
     const handleKeyDown = e => {
       e.preventDefault()
@@ -84,12 +82,18 @@ const Game = () => {
             if (j + 1 !== y) board[x][y] = 0
           }
         }
+        if (merged) {
+          merged = false
+          y--
+        }
       }
     }
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setBoard(JSON.parse(JSON.stringify(board)))
+    setTimeout(() => {
+      setBoard(JSON.parse(JSON.stringify(board)))
+    }, 200)
     checkGameOver(board)
   }
 
@@ -111,12 +115,18 @@ const Game = () => {
             if (j - 1 !== y) board[x][y] = 0
           }
         }
+        if (merged) {
+          merged = false
+          y++
+        }
       }
     }
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setBoard(JSON.parse(JSON.stringify(board)))
+    setTimeout(() => {
+      setBoard(JSON.parse(JSON.stringify(board)))
+    }, 200)
     checkGameOver(board)
   }
 
@@ -138,12 +148,18 @@ const Game = () => {
             if (i + 1 !== x) board[x][y] = 0
           }
         }
+        if (merged) {
+          merged = false
+          x--
+        }
       }
     }
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setBoard(JSON.parse(JSON.stringify(board)))
+    setTimeout(() => {
+      setBoard(JSON.parse(JSON.stringify(board)))
+    }, 200)
     checkGameOver(board)
   }
 
@@ -165,12 +181,18 @@ const Game = () => {
             if (i - 1 !== x) board[x][y] = 0
           }
         }
+        if (merged) {
+          merged = false
+          x++
+        }
       }
     }
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setBoard(JSON.parse(JSON.stringify(board)))
+    setTimeout(() => {
+      setBoard(JSON.parse(JSON.stringify(board)))
+    }, 200)
     checkGameOver(board)
   }
 
