@@ -4,6 +4,7 @@ import Craw from './components/Craw'
 import Game2048 from './components/Game2048/Game2048'
 import Hex from './components/Hex'
 import HexString from './components/HexString'
+import Iframe2048 from './components/Iframe2048'
 import PackJson from './components/PackJson'
 import ProtobufJson from './components/ProtobufJson'
 
@@ -28,14 +29,18 @@ const options = [
     value: 'craw',
     label: '爬虫组件',
   },
+  // {
+  //   value: 'game2048',
+  //   label: '2048游戏',
+  // },
   {
-    value: 'game2048',
-    label: '2048游戏',
+    value: 'iframe2048',
+    label: '2048游戏(iframe版)',
   },
 ]
 
 export default function Home() {
-  const [selected, setSelected] = useState(['game2048'])
+  const [selected, setSelected] = useState(['iframe2048'])
   return (
     <div class='flex flex-wrap flex-col items-center'>
       <h2>选择功能组件（请在 light 主题下使用）</h2>
@@ -53,7 +58,8 @@ export default function Home() {
       {selected.includes('hex') && <Hex />}
       {selected.includes('hexstring') && <HexString />}
       {selected.includes('craw') && <Craw />}
-      {selected.includes('game2048') && <Game2048 />}
+      {/* {selected.includes('game2048') && <Game2048 />} */}
+      {selected.includes('iframe2048') && <Iframe2048 />}
     </div>
   )
 }
