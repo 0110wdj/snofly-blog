@@ -91,9 +91,7 @@ const Game = () => {
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setTimeout(() => {
-      setBoard(JSON.parse(JSON.stringify(board)))
-    }, 200)
+    setBoard(JSON.parse(JSON.stringify(board)))
     checkGameOver(board)
   }
 
@@ -124,9 +122,7 @@ const Game = () => {
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setTimeout(() => {
-      setBoard(JSON.parse(JSON.stringify(board)))
-    }, 200)
+    setBoard(JSON.parse(JSON.stringify(board)))
     checkGameOver(board)
   }
 
@@ -157,9 +153,7 @@ const Game = () => {
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setTimeout(() => {
-      setBoard(JSON.parse(JSON.stringify(board)))
-    }, 200)
+    setBoard(JSON.parse(JSON.stringify(board)))
     checkGameOver(board)
   }
 
@@ -190,9 +184,7 @@ const Game = () => {
     if (beforeBoard !== JSON.stringify(board)) {
       addRandomNum(board)
     }
-    setTimeout(() => {
-      setBoard(JSON.parse(JSON.stringify(board)))
-    }, 200)
+    setBoard(JSON.parse(JSON.stringify(board)))
     checkGameOver(board)
   }
 
