@@ -51,6 +51,11 @@ message Problem {
     repeated string monitor_units = 2;  //["延迟(ms)",...] 长度同monitor_status相等
     repeated RoundTick ticks = 3;
     int32 end_round = 4;
+    string scene_id = 5;
+    string scene_name = 6;
+    string sub_scene_id = 7;
+    string sub_scene_name = 8;
+    repeated string name_path = 9;
 }
 
 message Event {
@@ -60,12 +65,19 @@ message Event {
     bytes data = 4;      // when type is 2/3
 }
 
+message TestCaseInfo {
+    string scene_name = 1;
+    string sub_scene_name = 2;
+    repeated string name_path = 3;
+}
+
 message Events {
     int32 round_index = 1;
     repeated Event events = 2;
     bool success = 3;  // 整轮是否成功
     string message = 4;
     string models = 5;  // json 字符串 [{type: "connect"}, {type: "send": model: "json string"}, {type: "receive",}, {type: "send_close"}, {type: "receive_close"}]
+    TestCaseInfo test_case_info = 6;  // json 字符串 {"sub_scene": "Attack.IPFragment", "test_case": "IP.version -> 20"}
 }
 `
 
