@@ -46,10 +46,14 @@
     <img src="https://img.shields.io/badge/shell-Junior-blue" alt="shell"          style="display:inline-block;" />
 
 - 设计与研究
+
   - <img src="https://img.shields.io/badge/English-Medior-yellow" alt="English"          style="display:inline-block;" />
     <img src="https://img.shields.io/badge/algorithm-Medior-yellow" alt="algorithm" style="display:inline-block;" />
     <img src="https://img.shields.io/badge/UI-Junior-blue" alt="UI"          style="display:inline-block;" />
     <img src="https://img.shields.io/badge/network-Junior-blue" alt="UI"          style="display:inline-block;" />
+
+- skills roadmap
+  - [github link](https://github.com/0110wdj/Stark-Mansion-Lab-One?tab=readme-ov-file#main-roadmap)
 
 ## MBTI
 
