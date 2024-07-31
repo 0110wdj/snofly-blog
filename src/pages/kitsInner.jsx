@@ -40,7 +40,7 @@ const options = [
 ]
 
 export default function Home() {
-  const [selected, setSelected] = useState(['iframe2048'])
+  const [selected, setSelected] = useState(['protobuf', 'packjson'])
   return (
     <div class='flex flex-wrap flex-col items-center'>
       <h2>选择功能组件（请在 light 主题下使用）</h2>

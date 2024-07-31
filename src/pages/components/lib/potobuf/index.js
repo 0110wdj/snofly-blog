@@ -93,5 +93,16 @@ export const protbufDecode = (base64, target = 'Events') => {
   const buffer = util.newBuffer(util.base64.length(base64))
   util.base64.decode(base64, buffer, 0)
   const message = MyMessage.decode(new Uint8Array(buffer))
+  // 业务逻辑：对 events 的 models 进一步解析
+  if (target === 'Events') {
+    message.models = JSON.parse(message.models)
+    for (const object of message.models) {
+      for (const key in object) {
+        if (typeof object[key].model === 'string') {
+          object[key].model = JSON.parse(object[key].model)
+        }
+      }
+    }
+  }
   return message
 }
