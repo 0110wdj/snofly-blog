@@ -57,4 +57,6 @@
 
 ## MBTI
 
-- [INFJ](https://www.16personalities.com/ch/infj-%E4%BA%BA%E6%A0%BC) 提倡者
+- [INFJ](https://www.16personalities.com/ch/infj-%E4%BA%BA%E6%A0%BC) 提倡者 2023
+
+- [INTJ](https://www.16personalities.com/ch/intj-%E4%BA%BA%E6%A0%BC) 建筑师 2024
