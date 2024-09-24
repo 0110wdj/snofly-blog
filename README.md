@@ -1,5 +1,5 @@
 # Blog WebSite
 
-A blog website frontend code.
+Front-end code for my personal website.
 
-[**WebSite Address**](http://www.snofly.cn)
+[**http://www.snofly.cn**](http://www.snofly.cn)
