@@ -2,12 +2,18 @@
 
 一个奋发自强的程序员；一个向内寻求力量的阅读者。
 
-- 1998 年生于重庆市
-- 2014 年入永川中学
-- 2017 年入华中农业大学
-- 2021 年毕业，从事 web 前端软件开发至今
-
 ![me](./me.jpeg)
+
+时间轴：
+
+<iframe
+  width="100%"
+  height="360px"
+  src="/files/about/snofly-timeline.html"
+  title="snofly-timeline"
+  frameborder="0"
+  allowfullscreen="allowfullscreen"
+/><br/ >
 
 ## 兴趣爱好
 

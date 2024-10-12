@@ -1,0 +1,158 @@
+<div class="timeline-done">
+  <div class="events">
+    <div class="event life">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>1998</time>
+        <div class="text">
+          <p>出生于中国重庆</p>
+        </div>
+      </div>
+    </div>
+    <div class="event programming">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>2017</time>
+        <div class="text">
+          <p>华中农业大学计算机专业</p>
+        </div>
+      </div>
+    </div>
+    <div class="event programming">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>2021.10</time>
+        <div class="text">
+          <p>专职前端开发</p>
+        </div>
+      </div>
+    </div>
+    <div class="event family">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>2022.08</time>
+        <div class="text">
+          <p>谈了个对象</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(to right, #63b3ff, transparent);
+  }
+
+  .events::before {
+    /* // We need some content for the element to show up. */
+    content: "";
+    /* // Use absolute positioning to place the timeline at the very top. */
+    position: absolute;
+    top: 0;
+    /* // With a height and with the timeline will be a tall and thin box. */
+    height: 100%;
+    width: 1px;
+  }
+
+  .events {
+    position: relative;
+  }
+
+  /* // For the tutorial I use slightly different colors, */
+  /* // but you get the idea. */
+  .events::before {
+    background: white;
+  }
+
+  /* // Events use different classes to differentiate them. */
+  .event.life .marker {
+    fill: rgb(55, 230, 55);
+  }
+
+  .event.programming .marker {
+    fill: magenta;
+  }
+
+  .event.family .marker {
+    fill: red;
+  }
+
+  /* // Make the time stand out */
+  .content time {
+    font-family: concourse_4, Helvetica, sans-serif;
+    font-weight: bold;
+  }
+
+  /* // Just some extra spacing to make the timeline not merge */
+  /* // with the surrounding text. */
+  .events {
+    margin: 0.5em;
+  }
+
+  .event {
+    display: flex;
+  }
+
+  .event .marker {
+    position: relative;
+    left: -6px;
+    top: 0px;
+  }
+
+  .event {
+    align-items: baseline;
+  }
+
+  .events {
+    display: flex;
+    /* // Lay out events column-wise instead of row-wise. */
+    flex-direction: column;
+    /* // Set some spacing between elements. */
+    row-gap: 1em;
+  }
+
+  .timeline-done * {
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 700px) {
+    body {
+      background: linear-gradient(to left, transparent, #63b3ff, #63b3ff, transparent);
+    }
+
+    .events::before {
+      left: 50%;
+    }
+
+    .event .marker {
+      order: 1;
+    }
+
+    .event .content {
+      text-align: right;
+      padding-inline: 1em;
+      width: 50%;
+    }
+
+    .event:nth-child(2n) {
+      flex-direction: row-reverse;
+    }
+
+    .event:nth-child(2n) .content {
+      text-align: left;
+    }
+
+    .event:nth-child(2n) .marker {
+      left: 6px;
+    }
+  }
+</style>
