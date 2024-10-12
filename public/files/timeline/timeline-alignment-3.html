@@ -1,0 +1,103 @@
+<div class="timeline-done">
+  <div class="events">
+    <div class="event life">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>1989</time>
+        <div class="text">
+          <p>I was born in the north of Sweden</p>
+        </div>
+      </div>
+    </div>
+    <div class="event programming">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>2006</time>
+        <div class="text">
+          <p>I got introduced to Visual Basic</p>
+        </div>
+      </div>
+    </div>
+    <div class="event family">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>August 2008</time>
+        <div class="text">
+          <p>Got together with Veronica</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background-color: #63b3ff;
+  }
+
+  .events::before {
+    /* // We need some content for the element to show up. */
+    content: "";
+    /* // Use absolute positioning to place the timeline at the very top. */
+    position: absolute;
+    top: 0;
+    /* // With a height and with the timeline will be a tall and thin box. */
+    height: 100%;
+    width: 1px;
+  }
+
+  .events {
+    position: relative;
+  }
+
+  /* // For the tutorial I use slightly different colors, */
+  /* // but you get the idea. */
+  .events::before {
+    background: white;
+  }
+
+  /* // Events use different classes to differentiate them. */
+  .event.life .marker {
+    fill: yellow;
+  }
+
+  .event.programming .marker {
+    fill: magenta;
+  }
+
+  .event.family .marker {
+    fill: red;
+  }
+
+  /* // Make the time stand out */
+  .content time {
+    font-family: concourse_4, Helvetica, sans-serif;
+    font-weight: bold;
+  }
+
+  /* // Just some extra spacing to make the timeline not merge */
+  /* // with the surrounding text. */
+  .events {
+    margin: 0.5em;
+  }
+
+  .event {
+    display: flex;
+  }
+
+  .event .marker {
+    position: relative;
+    left: -6px;
+    top: 0px;
+  }
+
+  .event {
+    align-items: baseline;
+  }
+</style>

@@ -1,0 +1,122 @@
+<div class="timeline-done">
+  <div class="events">
+    <div class="event life">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>1989</time>
+        <div class="text">
+          <p>I was born in the north of Sweden</p>
+        </div>
+      </div>
+    </div>
+    <div class="event programming">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>2006</time>
+        <div class="text">
+          <p>I got introduced to Visual Basic</p>
+        </div>
+      </div>
+    </div>
+    <div class="event family">
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+        <circle cx="6" cy="6" r="6"></circle>
+      </svg>
+      <div class="content">
+        <time>August 2008</time>
+        <div class="text">
+          <p>Got together with Veronica</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background-color: #63b3ff;
+  }
+
+  .timeline-done * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .timeline-done .events::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: #a98a78;
+  }
+
+  .timeline-done .events {
+    position: relative;
+    display: flex;
+    margin: 0.5em;
+    flex-direction: column;
+    row-gap: 1em;
+  }
+
+  .timeline-done .event {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .timeline-done .event .marker {
+    position: relative;
+    left: -6px;
+  }
+
+  .timeline-done .event.life .marker {
+    fill: #a06d00;
+  }
+
+  .timeline-done .event.programming .marker {
+    fill: #904180;
+  }
+
+  .timeline-done .event.family .marker {
+    fill: #bf0021;
+  }
+
+  .timeline-done .content time {
+    font-family: concourse_4, Helvetica, sans-serif;
+    font-weight: bold;
+  }
+
+  @media (min-width: 700px) {
+    .timeline-done .events::before {
+      left: 50%;
+    }
+
+    .timeline-done .event .marker {
+      order: 1;
+    }
+
+    .timeline-done .event .content {
+      width: 50%;
+      text-align: right;
+      padding-inline: 1em;
+    }
+
+    .timeline-done .event:is(.programming, .work, .projects) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-done .event:is(.programming, .work, .projects) .content {
+      text-align: left;
+    }
+
+    .timeline-done .event:is(.programming, .work, .projects) .marker {
+      left: 6px;
+    }
+  }
+</style>
