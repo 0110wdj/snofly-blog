@@ -128,21 +128,16 @@
       width: 50%;
     }
 
-    .event:nth-child(even) {
-      /* // Layout elements from right to left. */
+    .event:nth-child(2n) {
       flex-direction: row-reverse;
     }
 
-    .event:nth-child(even) {
-      .content {
-        text-align: left;
-      }
+    .event:nth-child(2n) .content {
+      text-align: left;
+    }
 
-      /* // The marker used to be offset -6px, but now we */
-      /* // move from the right. */
-      .marker {
-        left: 6px;
-      }
+    .event:nth-child(2n) .marker {
+      left: 6px;
     }
   }
 </style>
