@@ -2,7 +2,7 @@
 title: flex 实现时间轴
 published: 2024-10-12
 description: ""
-image: ""
+image: "timeline.png"
 tags: ["css", "翻译"]
 category: "前端入门"
 draft: false
