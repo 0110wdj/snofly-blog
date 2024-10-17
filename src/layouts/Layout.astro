@@ -82,13 +82,14 @@ const siteLang = siteConfig.lang.replace('_', '-')
 		<meta name="description" content={description || pageTitle}>
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		{favicons.map(favicon => (
+		<link rel="shortcut icon" href="/favicon/favicon.ico" />
+		<!-- {favicons.map(favicon => (
 			<link rel="icon"
 				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
 				  sizes={favicon.sizes}
 				  media={favicon.theme && `(prefers-color-scheme: ${favicon.theme})`}
 			/>
-		))}
+		))} -->
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script define:vars={{DEFAULT_THEME: DEFAULT_THEME, LIGHT_MODE: LIGHT_MODE, DARK_MODE: DARK_MODE, AUTO_MODE: AUTO_MODE}}>
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
