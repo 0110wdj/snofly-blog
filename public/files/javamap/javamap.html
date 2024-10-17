@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Markmap</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #mindmap {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/style.css">
+</head>
+
+<body>
+  <svg id="mindmap"></svg>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.2/dist/browser/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/index.js"></script>
+  <script>
+    (r => { setTimeout(r); })(() => {
+      const {
+        markmap,
+        mm
+      } = window;
+      const {
+        el
+      } = markmap.Toolbar.create(mm);
+      el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+      document.body.append(el);
+    })
+  </script>
+  <script>
+      ((getMarkmap, getOptions, root2, jsonOptions) => {
+        const markmap = getMarkmap();
+        window.mm = markmap.Markmap.create(
+          "svg#mindmap",
+          (getOptions || markmap.deriveOptions)(jsonOptions),
+          root2
+        );
+      })(() => window.markmap, null, {
+        "content": "狂神说 Java (77d)", "children": [{ "content": "JavaSE (18~20d)", "children": [{ "content": "计算机基础", "children": [], "payload": { "lines": "5,6" } }, { "content": "博客的重要性", "children": [], "payload": { "lines": "6,7" } }, { "content": "Java 基础语法", "children": [], "payload": { "lines": "7,8" } }, { "content": "流程控制和方法", "children": [], "payload": { "lines": "8,9" } }, { "content": "数组", "children": [], "payload": { "lines": "9,10" } }, { "content": "面向对象", "children": [{ "content": "封装", "children": [], "payload": { "lines": "11,12" } }, { "content": "继承", "children": [], "payload": { "lines": "12,13" } }, { "content": "多态", "children": [], "payload": { "lines": "13,14" } }, { "content": "抽象类", "children": [], "payload": { "lines": "14,15" } }, { "content": "接口", "children": [], "payload": { "lines": "15,16" } }], "payload": { "lines": "10,16" } }, { "content": "异常", "children": [], "payload": { "lines": "16,17" } }, { "content": "常用类", "children": [], "payload": { "lines": "17,18" } }, { "content": "集合框架", "children": [], "payload": { "lines": "18,19" } }, { "content": "IO", "children": [], "payload": { "lines": "19,20" } }, { "content": "多线程", "children": [], "payload": { "lines": "20,21" } }, { "content": "GUI(可选)", "children": [], "payload": { "lines": "21,22" } }, { "content": "网络编程", "children": [], "payload": { "lines": "22,23" } }, { "content": "注解和反射", "children": [], "payload": { "lines": "23,24" } }, { "content": "JUC 编程", "children": [], "payload": { "lines": "24,25" } }, { "content": "JVM 探完", "children": [], "payload": { "lines": "25,26" } }, { "content": "【扩展】23 种设计模式", "children": [], "payload": { "lines": "26,27" } }, { "content": "【扩展】XML", "children": [], "payload": { "lines": "27,28" } }, { "content": "【扩展】数据结构和算法", "children": [], "payload": { "lines": "28,29" } }, { "content": "【扩展】正则表达式", "children": [], "payload": { "lines": "29,31" } }], "payload": { "lines": "3,4" } }, { "content": "数据库 (4 d)", "children": [{ "content": "MySQL", "children": [], "payload": { "lines": "33,34" } }, { "content": "JDBC", "children": [], "payload": { "lines": "34,35" } }, { "content": "UML 类图", "children": [], "payload": { "lines": "35,36" } }, { "content": "数据库设计", "children": [], "payload": { "lines": "36,38" } }], "payload": { "lines": "31,32" } }, { "content": "前端 (7 d)", "children": [{ "content": "HTML", "children": [], "payload": { "lines": "40,41" } }, { "content": "CSS", "children": [], "payload": { "lines": "41,42" } }, { "content": "JS", "children": [], "payload": { "lines": "42,43" } }, { "content": "jQurery", "children": [], "payload": { "lines": "43,44" } }, { "content": "Layui / BootStrap", "children": [], "payload": { "lines": "44,45" } }, { "content": "Vue", "children": [], "payload": { "lines": "45,47" } }], "payload": { "lines": "38,39" } }, { "content": "JavaWeb (7 d)", "children": [{ "content": "Tomcat", "children": [], "payload": { "lines": "49,50" } }, { "content": "Http", "children": [], "payload": { "lines": "50,51" } }, { "content": "Maven", "children": [], "payload": { "lines": "51,52" } }, { "content": "Servlet", "children": [], "payload": { "lines": "52,53" } }, { "content": "Session、 Cookie", "children": [], "payload": { "lines": "53,54" } }, { "content": "JSP", "children": [], "payload": { "lines": "54,55" } }, { "content": "三层架构", "children": [], "payload": { "lines": "55,56" } }, { "content": "JSTL、EL 表达式", "children": [], "payload": { "lines": "56,57" } }, { "content": "过滤器", "children": [], "payload": { "lines": "57,58" } }, { "content": "监听器", "children": [], "payload": { "lines": "58,59" } }, { "content": "文件上传", "children": [], "payload": { "lines": "59,60" } }, { "content": "邮件收发", "children": [], "payload": { "lines": "60,61" } }, { "content": "【扩展】富文本编辑器", "children": [], "payload": { "lines": "61,63" } }], "payload": { "lines": "47,48" } }, { "content": "SSM 框架 (9 d)", "children": [{ "content": "Git", "children": [], "payload": { "lines": "65,66" } }, { "content": "MyBatis", "children": [], "payload": { "lines": "66,67" } }, { "content": "Spring", "children": [], "payload": { "lines": "67,68" } }, { "content": "SpringMVC", "children": [], "payload": { "lines": "68,70" } }], "payload": { "lines": "63,64" } }, { "content": "Linux (7 d)", "children": [{ "content": "Linux 基础", "children": [], "payload": { "lines": "72,73" } }, { "content": "Redis", "children": [], "payload": { "lines": "73,74" } }, { "content": "Nginx", "children": [], "payload": { "lines": "74,75" } }, { "content": "Docker", "children": [], "payload": { "lines": "75,77" } }], "payload": { "lines": "70,71" } }, { "content": "SpringBoot (8 d)", "children": [{ "content": "SpringBoot 基础", "children": [], "payload": { "lines": "79,80" } }, { "content": "SpringBoot 配置及原理", "children": [], "payload": { "lines": "80,81" } }, { "content": "SpringBoot 持久层操作", "children": [], "payload": { "lines": "81,82" } }, { "content": "SpringBoot Web 开发", "children": [], "payload": { "lines": "82,83" } }, { "content": "SpringBoot 缓存", "children": [], "payload": { "lines": "83,84" } }, { "content": "SpringBoot 消息", "children": [], "payload": { "lines": "84,85" } }, { "content": "SpringBoot 检索", "children": [], "payload": { "lines": "85,86" } }, { "content": "SpringBoot 任务", "children": [], "payload": { "lines": "86,87" } }, { "content": "SpringBoot 安全", "children": [], "payload": { "lines": "87,88" } }, { "content": "Dubbo+Zookeeper 分布式开发", "children": [], "payload": { "lines": "88,90" } }], "payload": { "lines": "77,78" } }, { "content": "SpringCloud (7 d)", "children": [{ "content": "微服务及微服务架构", "children": [], "payload": { "lines": "92,93" } }, { "content": "SpringCloud", "children": [], "payload": { "lines": "93,94" } }, { "content": "Eureka 服务注册与发现", "children": [], "payload": { "lines": "94,95" } }, { "content": "Feign、Ribbon 负载均衡", "children": [], "payload": { "lines": "95,96" } }, { "content": "Hystrix 熔断机制", "children": [], "payload": { "lines": "96,97" } }, { "content": "Zuul 路由网关", "children": [], "payload": { "lines": "97,98" } }, { "content": "SpringCloud Config 配置中心", "children": [], "payload": { "lines": "98,100" } }], "payload": { "lines": "90,91" } }, { "content": "Hadoop (8 d)", "children": [{ "content": "大数据时代", "children": [{ "content": "概念", "children": [], "payload": { "lines": "103,104" } }, { "content": "特点", "children": [], "payload": { "lines": "104,105" } }, { "content": "应用", "children": [], "payload": { "lines": "105,106" } }, { "content": "前景", "children": [], "payload": { "lines": "106,107" } }, { "content": "技术发展", "children": [], "payload": { "lines": "107,108" } }], "payload": { "lines": "102,108" } }, { "content": "Hadoop 简介", "children": [], "payload": { "lines": "108,109" } }, { "content": "Hadoop 环境搭建", "children": [], "payload": { "lines": "109,110" } }, { "content": "HDFS", "children": [], "payload": { "lines": "110,111" } }, { "content": "MapReduce", "children": [], "payload": { "lines": "111,112" } }, { "content": "Yarn", "children": [], "payload": { "lines": "112,113" } }, { "content": "Hive", "children": [], "payload": { "lines": "113,114" } }, { "content": "Hbase", "children": [], "payload": { "lines": "114,115" } }], "payload": { "lines": "100,101" } }], "payload": { "lines": "1,2" }
+      }, { "0": "c", "1": "o", "2": "l", "3": "o", "4": "r", "5": "F", "6": "r", "7": "e", "8": "e", "9": "z", "10": "e", "11": "L", "12": "e", "13": "v", "14": "e", "15": "l", "16": ":", "17": "3" })
+  </script>
+</body>
+
+
+<script>
+  // 原始数据记录
+  const mdStr = `
+---
+markmap: colorFreezeLevel:3
+---
+
+# 狂神说 Java (77d)
+
+## JavaSE (18~20d)
+
+- 计算机基础
+- 博客的重要性
+- Java 基础语法
+- 流程控制和方法
+- 数组
+- 面向对象
+  - 封装
+  - 继承
+  - 多态
+  - 抽象类
+  - 接口
+- 异常
+- 常用类
+- 集合框架
+- IO
+- 多线程
+- GUI(可选)
+- 网络编程
+- 注解和反射
+- JUC 编程
+- JVM 探完
+- 【扩展】23 种设计模式
+- 【扩展】XML
+- 【扩展】数据结构和算法
+- 【扩展】正则表达式
+
+## 数据库 (4 d)
+
+- MySQL
+- JDBC
+- UML 类图
+- 数据库设计
+
+## 前端 (7 d)
+
+- HTML
+- CSS
+- JS
+- jQurery
+- Layui / BootStrap
+- Vue
+
+## JavaWeb (7 d)
+
+- Tomcat
+- Http
+- Maven
+- Servlet
+- Session、 Cookie
+- JSP
+- 三层架构
+- JSTL、EL 表达式
+- 过滤器
+- 监听器
+- 文件上传
+- 邮件收发
+- 【扩展】富文本编辑器
+
+## SSM 框架 (9 d)
+
+- Git
+- MyBatis
+- Spring
+- SpringMVC
+
+## Linux (7 d)
+
+- Linux 基础
+- Redis
+- Nginx
+- Docker
+
+## SpringBoot (8 d)
+
+- SpringBoot 基础
+- SpringBoot 配置及原理
+- SpringBoot 持久层操作
+- SpringBoot Web 开发
+- SpringBoot 缓存
+- SpringBoot 消息
+- SpringBoot 检索
+- SpringBoot 任务
+- SpringBoot 安全
+- Dubbo+Zookeeper 分布式开发
+
+## SpringCloud (7 d)
+
+- 微服务及微服务架构
+- SpringCloud
+- Eureka 服务注册与发现
+- Feign、Ribbon 负载均衡
+- Hystrix 熔断机制
+- Zuul 路由网关
+- SpringCloud Config 配置中心
+
+## Hadoop (8 d)
+
+- 大数据时代
+  - 概念
+  - 特点
+  - 应用
+  - 前景
+  - 技术发展
+- Hadoop 简介
+- Hadoop 环境搭建
+- HDFS
+- MapReduce
+- Yarn
+- Hive
+- Hbase
+  `
+</script>
+
+</html>
