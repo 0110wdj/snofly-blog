@@ -41,3 +41,59 @@ draft: false
 虽然我不想这么说，但火狐浏览器在优化方面有点落后，而且只占市场份额的很小一部分，所以我不建议使用火狐浏览器的结果作为衡量的指标。
 
 ## 0 避免工作
+
+这听起来很简单，但却是最优先的优化步骤：如果你试图优化，你应该首先考虑**避免工作**。这里有一些概念：缓存(memoization)、惰性计算(laziness)、增量计算(incremental computation)。它们将根据上下文以合适的方式应用。比如说在 React 中，就是使用 memo 、useMemo 和其他合适的语法。
+
+## 1 避免字符串比较
+
+Javascript 悄无声息地隐藏了字符串比较的实际开销。
+
+如果你需要在 C 语言中比较字符串，你需要使用 strcmp 函数。而在 Javascript 中，使用 `===` 运算符，这样就看不见 strcmp 函数了。但它是存在的，字符串比较通常需要将字符串中的每个字符与另一个字符串中的字符进行比较，时间复杂度为 Ο(n)。
+
+要避免的一种常见写法是**字符串作为枚举**。但随着 TypeScript 的出现，这应该很容易避免，因为 enum 默认是整数。
+
+```ts
+// No
+enum Position {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+}
+```
+
+```ts
+// Yes
+enum Position {
+  TOP, // = 0
+  BOTTOM, // = 1
+}
+```
+
+这里是一个实际开销的比较：
+
+```js
+// 1. string compare
+const Position = {
+  TOP: "TOP",
+  BOTTOM: "BOTTOM",
+};
+
+let _ = 0;
+for (let i = 0; i < 1000000; i++) {
+  let current = i % 2 === 0 ? Position.TOP : Position.BOTTOM;
+  if (current === Position.TOP) _ += 1;
+}
+```
+
+```js
+// 2. int compare
+const Position = {
+  TOP: 0,
+  BOTTOM: 1,
+};
+
+let _ = 0;
+for (let i = 0; i < 1000000; i++) {
+  let current = i % 2 === 0 ? Position.TOP : Position.BOTTOM;
+  if (current === Position.TOP) _ += 1;
+}
+```
