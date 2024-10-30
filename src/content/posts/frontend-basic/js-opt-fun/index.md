@@ -98,7 +98,7 @@ for (let i = 0; i < 1000000; i++) {
 }
 ```
 
-结果：
+基准测试结果：
 
 - 1、string 50.35%
 - 2、int 100%
@@ -113,3 +113,183 @@ for (let i = 0; i < 1000000; i++) {
 举个现实的例子，我能够使[这个 JSON5 js 解析器](https://github.com/json5/json5/pull/278)（遗憾的是，这个改动并没有被合并，但这就是开源的魅力之处）运行速度提高两倍，而改变仅仅是将字符串常量替换为数字。
 
 ## 2 避免不同的结构
+
+JS 引擎有一种默认的优化：先假设对象具有相特定的结构，且假设函数的参数对象具有相同的结构，然后就只需要存储一次对象的 keys，然后单独用一个数据存储对象的 values。
+
+如下所示：
+
+```js
+// 比如这些对象的结构是一致的
+const objects = [
+  {
+    name: "Anthony",
+    age: 36,
+  },
+  {
+    name: "Eckhart",
+    age: 42,
+  },
+  {
+    name: "a",
+    age: 1,
+  },
+  {
+    name: "b",
+    age: 2,
+  },
+  {
+    name: "c",
+    age: 3,
+  },
+  {
+    name: "d",
+    age: 4,
+  },
+  {
+    name: "e",
+    age: 5,
+  },
+  {
+    name: "f",
+    age: 6,
+  },
+  {
+    name: "g",
+    age: 7,
+  },
+  {
+    name: "h",
+    age: 8,
+  },
+  {
+    name: "i",
+    age: 9,
+  },
+  {
+    name: "j",
+    age: 10,
+  },
+];
+```
+
+```js
+// 于是，使用这样的存储结构，显然能够减少很多重复字符
+const shape = [
+  { name: "name", type: "string" },
+  { name: "age", type: "integer" },
+];
+
+const objects = [
+  ["Anthony", 36],
+  ["Eckhart", 42],
+  ["a", 1],
+  ["b", 2],
+  ["c", 3],
+  ["d", 4],
+  ["e", 5],
+  ["f", 6],
+  ["g", 7],
+  ["h", 8],
+  ["i", 9],
+  ["j", 10],
+];
+```
+
+> 关于术语的说明：
+> 我使用了 shap 这个词来描述这个概念，但要注意，你也可以使用 hidden class 或 map 来描述它，这取决于引擎。
+
+> （译者注：为了增加对比性，译者增加了示例的内容。另外，原文使用 shap 这个单词，但是翻译不是“形状”，而是“结构”，因为“结构”这个词更能说明数量和类型。）
+
+举个例子，在运行时，如果下面这个函数，接收到的两个参数的结构都是 {x:number,y:number}, 那么引擎将推测未来的参数都是这样的结构，然后就能生成针对性的机器代码。
+
+```js
+function add(a, b) {
+  return {
+    x: a.x + b.x,
+    y: a.y + b.y,
+  };
+}
+```
+
+一旦传递的对象结构不再是 {x,y} —— 比如改为 {y,x}, 那么引擎就会撤销它的推测（相当于放弃这种优化），然后函数就会突然变得相当慢了。
+
+我尽量减少相关的解释，如果你想了解更多细节，你应该去看看 [mraleph 文章](https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html) 的解释。
+
+这里我要强调的是，V8 中有 3 种特别的模式，以对应不同的访问方式:
+
+- 单态 —— 只有一种结构
+- 多态 —— 有 2-4 种结构
+- 亚态 —— 5 种以上的结构
+
+> (译者述：原文描述为 monomorphic (1 shape), polymorphic (2-4 shapes), and megamorphic (5+ shapes))
+
+要我说，你就应该保持单态模式，因为它的效率最高。
+
+```js
+// setup
+let _ = 0;
+```
+
+```js
+// 1. monomorphic
+const o1 = { a: 1, b: _, c: _, d: _, e: _ };
+const o2 = { a: 1, b: _, c: _, d: _, e: _ };
+const o3 = { a: 1, b: _, c: _, d: _, e: _ };
+const o4 = { a: 1, b: _, c: _, d: _, e: _ };
+const o5 = { a: 1, b: _, c: _, d: _, e: _ }; // all shapes are equal
+```
+
+```js
+// 2. polymorphic
+const o1 = { a: 1, b: _, c: _, d: _, e: _ };
+const o2 = { a: 1, b: _, c: _, d: _, e: _ };
+const o3 = { a: 1, b: _, c: _, d: _, e: _ };
+const o4 = { a: 1, b: _, c: _, d: _, e: _ };
+const o5 = { b: _, a: 1, c: _, d: _, e: _ }; // this shape is different
+```
+
+```js
+// 3. megamorphic
+const o1 = { a: 1, b: _, c: _, d: _, e: _ };
+const o2 = { b: _, a: 1, c: _, d: _, e: _ };
+const o3 = { b: _, c: _, a: 1, d: _, e: _ };
+const o4 = { b: _, c: _, d: _, a: 1, e: _ };
+const o5 = { b: _, c: _, d: _, e: _, a: 1 }; // all shapes are different
+```
+
+```js
+// test case
+function add(a1, b1) {
+  return a1.a + a1.b + a1.c + a1.d + a1.e + b1.a + b1.b + b1.c + b1.d + b1.e;
+}
+
+let result = 0;
+for (let i = 0; i < 1000000; i++) {
+  result += add(o1, o2);
+  result += add(o3, o4);
+  result += add(o4, o5);
+}
+```
+
+基准测试结果：
+
+- 1. monomorphic: 100%
+- 2. polymorphic: 13.07%
+- 3. megamorphic: 4.09%
+
+### 对此，我到底应该怎么办？
+
+只需要保证你的对象都有相同的结构就行了。
+
+但是说起来容易做起来难，即使是编写 recat 组件 props 顺序不同这样的事情，也会导致退出单态模式。
+
+举个例子：
+我在 React 的代码库中发现了一个 [简单的例子](https://github.com/facebook/react/pull/28569)，但在几年前他们有一个 [更严重的类似的问题](https://v8.dev/blog/react-cliff) —— 他们用整数初始化了一个对象，但是又存储浮点数。
+
+没错，改变 number 类型也会改变结构，number 隐含着 integer 和 float 两种类型。这是需要处理的。
+
+> 关于 number 的表示：
+> 引擎通常可以将整数编码为值。例如，V8 以 32 位表示值，小整数作为紧凑的 [Smi](https://medium.com/fhinkel/v8-internals-how-small-is-a-small-integer-e0badc18b6da)值，但浮点数和大整数像字符串和对象一样作为指针传递。
+> JSC 使用 64 位编码，[双标记](https://ktln2.org/2020/08/25/javascriptcore/)，按值传递所有数字，其余的作为指针传递。
+
+## 3 避免数组或对象方法
