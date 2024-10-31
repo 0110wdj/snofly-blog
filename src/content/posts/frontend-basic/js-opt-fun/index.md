@@ -293,3 +293,53 @@ for (let i = 0; i < 1000000; i++) {
 > JSC 使用 64 位编码，[双标记](https://ktln2.org/2020/08/25/javascriptcore/)，按值传递所有数字，其余的作为指针传递。
 
 ## 3 避免数组或对象方法
+
+我和大多数人一样喜欢函数式(functional)编程，但除非你在 Haskell/OCaml/Rust 这种能将“函数式代码”高效编译成“机器代码”的环境中工作，否则函数式总是慢于命令式(imperative)的。
+
+```js
+const result = [1.5, 3.5, 5.0]
+  .map((n) => Math.round(n))
+  .filter((n) => n % 2 === 0)
+  .reduce((a, n) => a + n, 0);
+```
+
+这些方法的问题在于：
+
+1、它们需要生成数组的完整副本，这些副本稍后需要由 gc 释放。（我们在第五节会讨论内存 I/O 的更多细节）
+2、它们对 N 个操作遍历 N 次，而 for 循环只需要遍历一次。
+
+```js
+// setup:
+const numbers = Array.from({ length: 10_000 }).map(() => Math.random());
+```
+
+```js
+// 1. functional
+const result = numbers
+  .map((n) => Math.round(n * 10))
+  .filter((n) => n % 2 === 0)
+  .reduce((a, n) => a + n, 0);
+```
+
+```js
+// 2. imperative
+let result = 0;
+for (let i = 0; i < numbers.length; i++) {
+  let n = Math.round(numbers[i] * 10);
+  if (n % 2 !== 0) continue;
+  result = result + n;
+}
+```
+
+基准测试结果：
+
+- 1. functional: 36.51%
+- 2. imperative: 100%
+
+例如 Object.values(), Object.keys() 和 Object.entries() 等方法也存在类似的问题，因为它们也会申请分配更多的数据空间，而内存访问是所有性能问题的根源。
+
+No really I swear，我会在第五节讨论内存问题。
+
+> （译者注：原文是：“No really I swear, I’ll show you in section 5.”，总感觉作者很皮。）
+
+## 4 避免间接访问
