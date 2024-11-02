@@ -342,4 +342,100 @@ No really I swear，我会在第五节讨论内存问题。
 
 > （译者注：原文是：“No really I swear, I’ll show you in section 5.”，总感觉作者很皮。）
 
-## 4 避免间接访问
+## 4 避免间接访问(Avoid indirection)
+
+另一个优化收益的点是减少使用**间接源**(source of indirection) —— 主要是这三种间接源：
+
+- 使用代理
+- 多层嵌套访问
+- 多层函数调用
+
+```js
+const point = { x: 10, y: 20 };
+
+// 1.
+// Proxy 对象难以被优化，因为它们的 get/set 函数可能会运行自定义逻辑，所以引擎无法做出他们的一般假设。
+const proxy = new Proxy(point, {
+  get: (t, k) => {
+    return t[k];
+  },
+});
+// 有些引擎可以使代理成本消失，但这些优化是昂贵的，并且容易出错。
+const x = proxy.x;
+
+// 2.
+// 通常被忽视，但通过 `.` 或 `[]` 访问对象也是一个间接源。在简单的情况下，引擎可能会优化掉这些成本：
+const x = point.x;
+// 但是，每个额外的访问都将增加成本，并且使引擎难以做出关于 point 状态的一般假设：
+const x = this.state.circle.center.point.x;
+
+// 3.
+// 最后，函数调用也可能有成本。引擎通常能够内联这些函数：
+function getX(p) {
+  return p.x;
+}
+const x = getX(p);
+// 但是，这并不能确保优化。例如，如果这个函数调用不是来自静态函数：
+function Component({ point, getX }) {
+  return getX(point);
+}
+```
+
+目前，Proxy 的基准测试结果在 V8 上非常糟糕。上次我检查时，代理对象总是从 JIT 回退到解释器，从这些结果来看，情况可能仍然如此。
+
+```js
+// 1. proxy access
+const point = new Proxy({ x: 10, y: 20 }, { get: (t, k) => t[k] });
+
+for (let _ = 0, i = 0; i < 100_000; i++) {
+  _ += point.x;
+}
+```
+
+```js
+// 2. direct access
+const point = { x: 10, y: 20 };
+const x = point.x;
+
+for (let _ = 0, i = 0; i < 100_000; i++) {
+  _ += x;
+}
+```
+
+基准测试结果：
+
+- 1. proxy access: 2.8%
+- 2. direct access: 100%
+
+我还想展示访问深度嵌套对象与直接访问的对比，但是当存在热循环(hot loop)和常量对象时，引擎非常擅长[通过 escape 分析优化对象访问](https://www.youtube.com/watch?v=KiWEWLwQ3oI&t=1055s)。于是我插入了一点间接的东西来防止这种优化。
+
+```js
+// 1. nested access
+const a = { state: { center: { point: { x: 10, y: 20 } } } };
+const b = { state: { center: { point: { x: 10, y: 20 } } } };
+const get = (i) => (i % 2 ? a : b);
+
+let result = 0;
+for (let i = 0; i < 100_000; i++) {
+  result = result + get(i).state.center.point.x;
+}
+```
+
+```js
+// 2. direct access
+const a = { x: 10, y: 20 }.x;
+const b = { x: 10, y: 20 }.x;
+const get = (i) => (i % 2 ? a : b);
+
+let result = 0;
+for (let i = 0; i < 100_000; i++) {
+  result = result + get(i);
+}
+```
+
+基准测试结果：
+
+- 1. nested access: 42.08%
+- 2. direct access: 100%
+
+## 5. 避免缓存丢失
