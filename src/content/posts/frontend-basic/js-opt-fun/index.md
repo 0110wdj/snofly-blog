@@ -438,4 +438,83 @@ for (let i = 0; i < 100_000; i++) {
 - 1. nested access: 42.08%
 - 2. direct access: 100%
 
-## 5. 避免缓存丢失
+## 5 避免缓存未命中
+
+This point requires a bit of low-level knowledge, but has implications even in javascript, so I’ll explain. From the CPU point of view, retrieving memory from RAM is slow. To speed things up, it uses mainly two optimizations.
+
+虽然这一节讨论的是底层知识，但在 javascript 中也有同样的影响，所以我会解释一下。从 CPU 的角度来看，从 RAM 中检索内存是缓慢的。为了加速，它主要使用两种优化。
+
+### 5.1 预取(refetching)
+
+第一种是**预取(refetching)**：它提前获取更多的内存，并希望这是你感兴趣的内存。
+
+它总是猜测，如果你请求一个内存地址，那么你将对紧随其后的内存区域感兴趣。所以**按顺序访问数据**是关键。
+
+在下面的示例中，我们可以观察到随机访问内存的影响。
+
+```js
+// setup:
+const K = 1024;
+const length = 1 * K * K;
+
+// 这些点是一个接一个创建的，所以它们在内存中是按顺序分配的。
+const points = new Array(length);
+for (let i = 0; i < points.length; i++) {
+  points[i] = { x: 42, y: 0 };
+}
+
+// 这个数组包含与上面相同的数据，但以随机顺序排列。
+const shuffledPoints = shuffle(points.slice());
+```
+
+```js
+// 1. sequential
+let _ = 0;
+for (let i = 0; i < points.length; i++) {
+  _ += points[i].x;
+}
+```
+
+```js
+// 2. random
+let _ = 0;
+for (let i = 0; i < shuffledPoints.length; i++) {
+  _ += shuffledPoints[i].x;
+}
+```
+
+基准测试结果：
+
+- 1. sequential: 100%
+- 2. random: 26.22%
+
+#### 我应该怎么办？
+
+You cannot assume that objects created sequentially will stay at the same location after some time because the garbage collector might move them around. There is one exception to that, and it’s arrays of numbers, preferably TypedArray instances:
+
+这方面可能是最难付诸实践的，因为 javascript 没有在内存中放置对象的方法。
+
+但是你可以使用上文例子中的知识去优化：例如在顺序改变之前对数据进行操作。
+
+你不能假设顺序创建的对象在一段时间后会保持在同一位置，因为 gc 可能会移动它们。
+
+有一个例外，它是数字数组，最好是 TypedArray 实例：
+
+```js
+// from this
+const points = [
+  { x: 0, y: 5 },
+  { x: 0, y: 10 },
+];
+
+// to this
+const points = new Int64Array([0, 5, 0, 10]);
+```
+
+查看更多详细的例子，查看[这个链接](https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#optimizing-parsing---reducing-gc-pressure)。
+
+> 请注意，它包含一些现在已经过时的优化，但总体上仍然是准确的。
+
+## 5.2 L1/2/3 缓存(Caching in L1/2/3)
+
+
