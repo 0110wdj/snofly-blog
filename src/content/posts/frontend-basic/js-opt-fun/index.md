@@ -589,3 +589,67 @@ for (let i = 0; i < 100000; i++) {
 > 它非常方便，但每次使用它时都会在内存中创建一个新对象。更多的内存 I/O，更慢的缓存！（More memory I/O, slower caches!）
 
 ## 6 避免大型对象
+
+Hashmaps are prone to this because their data is usually randomly & evenly distributed over the memory region they occupy. Let’s see how it behaves with this map of some users indexed by their ID.
+
+如第 2 节所述，引擎使用结构(shapes)来优化对象。
+
+但是，当结构变得太大时，引擎别无选择，只能使用常规的 hashmap（如 Map 对象）。
+
+正如我们在第 5 节中看到的，缓存缺失会显著降低性能。
+
+hashmap 很容易出现这种情况，因为它们的数据通常是随机且均匀地分布在它们所占用的内存区域上。
+
+让我们看看它是如何处理这个由用户 ID 索引的用户映射的。
+
+```js
+// setup:
+const USERS_LENGTH = 1_000;
+```
+
+```js
+// setup:
+const byId = {};
+Array.from({ length: USERS_LENGTH }).forEach((_, id) => {
+  byId[id] = { id, name: "John" };
+});
+let _ = 0;
+```
+
+```js
+// 1. [] access
+Object.keys(byId).forEach((id) => {
+  _ += byId[id].id;
+});
+```
+
+```js
+// 2. direct access
+Object.values(byId).forEach((user) => {
+  _ += user.id;
+});
+```
+
+基准测试结果：
+
+- 1. [] access: 43.18%
+- 2. direct access: 100%
+
+我们还可以观察到，随着对象大小的增长，性能是如何不断下降的：
+
+```js
+// setup:
+const USERS_LENGTH = 100_000;
+```
+
+基准测试结果：
+
+- 1. [] access: 20.67%
+- 2. direct access: 100%
+
+#### 我应该怎么办？
+
+如上所示，避免频繁索引大型对象。最好事先将对象转换为数组。组织数据以获得模型上的 ID 会有所帮助，因为可以使用 Object.values()，而不必引用键映射来获取 ID。
+
+## 7 使用 eval
+
