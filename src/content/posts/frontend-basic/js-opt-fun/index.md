@@ -490,8 +490,6 @@ for (let i = 0; i < shuffledPoints.length; i++) {
 
 #### 我应该怎么办？
 
-You cannot assume that objects created sequentially will stay at the same location after some time because the garbage collector might move them around. There is one exception to that, and it’s arrays of numbers, preferably TypedArray instances:
-
 这方面可能是最难付诸实践的，因为 javascript 没有在内存中放置对象的方法。
 
 但是你可以使用上文例子中的知识去优化：例如在顺序改变之前对数据进行操作。
@@ -515,6 +513,79 @@ const points = new Int64Array([0, 5, 0, 10]);
 
 > 请注意，它包含一些现在已经过时的优化，但总体上仍然是准确的。
 
-## 5.2 L1/2/3 缓存(Caching in L1/2/3)
+### 5.2 L1/2/3 缓存(Caching in L1/2/3)
 
+第二种 CUP 使用的优化是 L1/L2/L3 缓存：它们好比更快的 RAM，但也更昂贵，所以也更小。它们包含 RAM 数据，但充当 LRU 缓存。数据在工作时进入，并在新的工作数据需要空间时写回主 RAM。因此，这里的关键是**使用尽可能少的数据**来将工作数据集保存在快速缓存中。
 
+在下面的示例中，我们可以观察破坏每个连续缓存后的影响。
+
+```js
+// setup:
+const KB = 1024;
+const MB = 1024 * KB;
+
+const L1 = 256 * KB;
+const L2 = 5 * MB;
+const L3 = 18 * MB;
+const RAM = 32 * MB;
+
+// 对于所有测试用例，我们将访问相同的缓冲区。
+// 但是不同的测试用例，只会访问部分区间。比如第一个用例只会访问到 buffer 的 0 - L1 区间，第二个用例只会访问到 0 - L2 区间，以此类推。
+const buffer = new Int8Array(RAM);
+buffer.fill(42);
+
+const random = (max) => Math.floor(Math.random() * max);
+```
+
+```js
+// 1. L1
+let r = 0;
+for (let i = 0; i < 100000; i++) {
+  r += buffer[random(L1)];
+}
+```
+
+```js
+// 2. L2
+let r = 0;
+for (let i = 0; i < 100000; i++) {
+  r += buffer[random(L2)];
+}
+```
+
+```js
+// 3. L3
+let r = 0;
+for (let i = 0; i < 100000; i++) {
+  r += buffer[random(L3)];
+}
+```
+
+```js
+// 4. RAM
+let r = 0;
+for (let i = 0; i < 100000; i++) {
+  r += buffer[random(RAM)];
+}
+```
+
+基准测试结果：
+
+- 1. L1: 100%
+- 2. L2: 78.06%
+- 3. L3: 65.89%
+- 4. RAM: 29.33%
+
+#### 我应该怎么办？
+
+消除每一个可以消除的数据或内存分配。数据集越小，程序的运行速度就越快。内存 I/O 是 95% 的程序的瓶颈。另一个好的策略是将你的工作拆分，确保你每次只处理一个小的数据集。
+
+更多 CPU 和内存的细节信息，可以[查看这个](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)。
+
+> 关于不可变数据结构
+> 对于清晰度和正确性来说，不可变性是很好的，但是在性能方面，更新不可变数据结构意味着创建容器的副本，这就需要更多的内存 I/O 来刷新缓存。你应该尽可能避免不可变数据结构。
+
+> 关于解构运算 {...rest}
+> 它非常方便，但每次使用它时都会在内存中创建一个新对象。更多的内存 I/O，更慢的缓存！（More memory I/O, slower caches!）
+
+## 6 避免大型对象
