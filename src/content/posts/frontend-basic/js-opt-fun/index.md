@@ -632,7 +632,7 @@ Object.values(byId).forEach((user) => {
 
 基准测试结果：
 
-- 1. [] access: 43.18%
+- 1. \[ \] access: 43.18%
 - 2. direct access: 100%
 
 我们还可以观察到，随着对象大小的增长，性能是如何不断下降的：
@@ -644,7 +644,7 @@ const USERS_LENGTH = 100_000;
 
 基准测试结果：
 
-- 1. [] access: 20.67%
+- 1. \[ \] access: 20.67%
 - 2. direct access: 100%
 
 #### 我应该怎么办？
@@ -653,3 +653,55 @@ const USERS_LENGTH = 100_000;
 
 ## 7 使用 eval
 
+有些 javascript 模式(patterns)很难针对引擎进行优化，通过使用 eval() 或其衍生物，可以使这些模式消失。
+
+在这个例子中，我们可以看到 eval() 是如何避免“创建带有动态对象键的对象”的开销的：
+
+```js
+// setup:
+const key = "requestId";
+const values = Array.from({ length: 100_000 }).fill(42);
+```
+
+```js
+// 1. without eval
+function createMessages(key, values) {
+  const messages = [];
+  for (let i = 0; i < values.length; i++) {
+    messages.push({ [key]: values[i] });
+  }
+  return messages;
+}
+
+createMessages(key, values);
+```
+
+```js
+// 2. with eval
+function createMessages(key, values) {
+  const messages = [];
+  const createMessage = new Function(
+    "value",
+    `return { ${JSON.stringify(key)}: value }`
+  );
+  for (let i = 0; i < values.length; i++) {
+    messages.push(createMessage(values[i]));
+  }
+  return messages;
+}
+
+createMessages(key, values);
+```
+
+基准测试结果：
+
+- 1. without eval: 53.2%
+- 2. with eval: 100%
+
+eval 的另一个好的用例可能是编译一个过滤器谓词函数，在该函数中丢弃你知道永远不会使用的分支。
+
+一般来说，任何将在热循环中运行的函数都是这种优化的良好候选者。
+
+显然，关于 eval() 的常见警告仍然适用：不要相信用户输入，对传递到 eval() 代码中的任何内容进行消毒，并且不要创建任何 XSS 的可能性。还要注意，有些环境不允许访问 eval()，例如带有 CSP 的浏览器页面。
+
+## 8 谨慎使用字符串
