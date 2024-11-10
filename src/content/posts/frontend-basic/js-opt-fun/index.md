@@ -112,7 +112,7 @@ for (let i = 0; i < 1000000; i++) {
 
 举个现实的例子，我能够使[这个 JSON5 js 解析器](https://github.com/json5/json5/pull/278)（遗憾的是，这个改动并没有被合并，但这就是开源的魅力之处）运行速度提高两倍，而改变仅仅是将字符串常量替换为数字。
 
-## 2 避免不同的结构
+## 2 避免不同的结构/形状
 
 JS 引擎有一种默认的优化：先假设对象具有相特定的结构，且假设函数的参数对象具有相同的结构，然后就只需要存储一次对象的 keys，然后单独用一个数据存储对象的 values。
 
@@ -705,3 +705,272 @@ eval 的另一个好的用例可能是编译一个过滤器谓词函数，在该
 显然，关于 eval() 的常见警告仍然适用：不要相信用户输入，对传递到 eval() 代码中的任何内容进行消毒，并且不要创建任何 XSS 的可能性。还要注意，有些环境不允许访问 eval()，例如带有 CSP 的浏览器页面。
 
 ## 8 谨慎使用字符串
+
+我们已经在前文看到字符串比它们看起来的。
+
+这里我有一个好消息和一个坏消息，我将按照唯一的逻辑顺序宣布（先坏后好）：字符串比它们看起来更复杂，但它们也可以非常有效地使用。
+
+基于上下文关系，字符串操作是 JavaScript 的核心部分。
+
+为了优化字符串较多的代码，引擎必须具有创造性。
+
+我的意思是，他们必须用 c++ 中的多个字符串表示来表示 String 对象，这取决于用例。
+
+有两种情况你应该担心，因为它们适用于 V8（到目前为止最常见的引擎），通常也适用于其他引擎。
+
+首先，与+连接的字符串不会创建两个输入字符串的副本。该操作创建一个指向每个子字符串的指针。如果是打字的话，应该是这样的：
+
+```js
+class String {
+  abstract value(): char[] {}
+}
+
+class BytesString {
+  constructor(bytes: char[]) {
+    this.bytes = bytes
+  }
+  value() {
+    return this.bytes
+  }
+}
+
+class ConcatenatedString {
+  constructor(left: String, right: String) {
+    this.left = left
+    this.right = right
+  }
+  value() {
+    return [...this.left.value(), ...this.right.value()]
+  }
+}
+
+function concat(left, right) {
+  return new ConcatenatedString(left, right)
+}
+
+const first = new BytesString(['H', 'e', 'l', 'l', 'o', ' '])
+const second = new BytesString(['w', 'o', 'r', 'l', 'd'])
+
+// See ma, no array copies!
+const message = concat(first, second)
+```
+
+其次，字符串切片也不需要创建副本：它们可以简单地指向另一个字符串中的范围。继续上面的例子：
+
+```js
+class SlicedString {
+  constructor(source: String, start: number, end: number) {
+    this.source = source;
+    this.start = start;
+    this.end = end;
+  }
+  value() {
+    return this.source.value().slice(this.start, this.end);
+  }
+}
+
+function substring(source, start, end) {
+  return new SlicedString(source, start, end);
+}
+
+// This represents "He", but it still contains no array copies.
+// It's a SlicedString to a ConcatenatedString to two BytesString
+const firstTwoLetters = substring(message, 0, 2);
+```
+
+但这里有一个问题：一旦你需要开始改变这些字节，那就是你开始支付复制成本的时刻。假设我们回到 String 类并尝试添加一个。trimend 方法：
+
+```js
+class String {
+  abstract value(): char[] {}
+
+  trimEnd() {
+    // `.value()` here might be calling
+    // our Sliced->Concatenated->2*Bytes string!
+    const bytes = this.value()
+
+    const result = bytes.slice()
+    while (result[result.length - 1] === ' ')
+      result.pop()
+    return new BytesString(result)
+  }
+}
+```
+
+那么让我们跳到一个例子，在这个例子中，我们比较了使用突变和只使用连接的操作：
+
+```js
+// setup:
+const classNames = ["primary", "selected", "active", "medium"];
+```
+
+```js
+// 1. mutation
+const result = classNames.map((c) => `button--${c}`).join(" ");
+```
+
+```js
+// 2. concatenation
+const result = classNames
+  .map((c) => "button--" + c)
+  .reduce((acc, c) => acc + " " + c, "");
+```
+
+基准测试结果：
+
+- 1. mutation: 37.43%
+- 2. concatenation: 100%
+
+#### 我应该怎么办？
+
+一般来说，尽可能长时间地避免突变。这包括.trim（）、.replace（）等方法。考虑一下如何避免这些方法。在某些引擎中，字符串模板也可能比+慢。目前在 V8 中是这样的，但将来可能不会，所以基准测试。
+
+关于上面的 SlicedString 的注意事项，您应该注意，如果内存中有一个非常大字符串的小子字符串，它可能会阻止垃圾收集器收集大字符串！如果您正在处理大文本并从中提取小字符串，则可能会泄漏大量内存。
+
+```js
+const large = Array.from({ length: 10_000 })
+  .map(() => "string")
+  .join("");
+const small = large.slice(0, 50);
+//    ^ will keep `large` alive
+```
+
+解决办法是利用变异方法。如果我们在小指针上使用其中一个指针，它将强制复制，并且旧的指向大指针将丢失：
+
+```js
+// replace a token that doesn't exist
+const small = small.replace("#".repeat(small.length + 1), "");
+```
+
+有关更多细节，请参阅 [V8 中的 string.h](https://github.com/v8/v8/blob/main/src/objects/string.h) 或 [JavaScriptCore 中的 jstring.h](https://github.com/WebKit/WebKit/blob/main/Source/JavaScriptCore/runtime/JSString.h)。
+
+> 关于字符串复杂度:
+> 我已经快速浏览了一些东西，但是有很多实现细节增加了字符串的复杂性。每种字符串表示通常都有最小长度。例如，连接字符串可能不适用于非常小的字符串。有时也有限制，例如避免指向子字符串的子字符串。阅读上面链接的 c++文件可以很好地了解实现细节，即使只是阅读注释。
+
+## 9 使用专业化
+
+性能优化中的一个重要概念是专门化：调整逻辑以适应特定用例的约束。这通常意味着找出哪些条件可能对您的情况为真，并针对这些条件进行编码。
+
+假设我们是一个商家，有时需要在他们的产品列表中添加标签。根据经验，我们知道标签通常是空的。知道了这些信息，我们就可以针对这种情况对函数进行专门化：
+
+```js
+// setup:
+const descriptions = ["apples", "oranges", "bananas", "seven"];
+const someTags = {
+  apples: "::promotion::",
+};
+const noTags = {};
+
+// Turn the products into a string, with their tags if applicable
+function productsToString(description, tags) {
+  let result = "";
+  description.forEach((product) => {
+    result += product;
+    if (tags[product]) result += tags[product];
+    result += ", ";
+  });
+  return result;
+}
+
+// Specialize it now
+function productsToStringSpecialized(description, tags) {
+  // We know that `tags` is likely to be empty, so we check
+  // once ahead of time, and then we can remove the `if` check
+  // from the inner loop
+  if (isEmpty(tags)) {
+    let result = "";
+    description.forEach((product) => {
+      result += product + ", ";
+    });
+    return result;
+  } else {
+    let result = "";
+    description.forEach((product) => {
+      result += product;
+      if (tags[product]) result += tags[product];
+      result += ", ";
+    });
+    return result;
+  }
+}
+function isEmpty(o) {
+  for (let _ in o) {
+    return false;
+  }
+  return true;
+}
+```
+
+```js
+// 1. not specialized
+for (let i = 0; i < 100; i++) {
+  productsToString(descriptions, someTags);
+  productsToString(descriptions, noTags);
+  productsToString(descriptions, noTags);
+  productsToString(descriptions, noTags);
+  productsToString(descriptions, noTags);
+}
+```
+
+```js
+// 2. specialized
+for (let i = 0; i < 100; i++) {
+  productsToStringSpecialized(descriptions, someTags);
+  productsToStringSpecialized(descriptions, noTags);
+  productsToStringSpecialized(descriptions, noTags);
+  productsToStringSpecialized(descriptions, noTags);
+  productsToStringSpecialized(descriptions, noTags);
+}
+```
+
+基准测试结果：
+
+- 1. not specialized: 85.71%
+- 2. specialized: 100%
+
+这种类型的优化可以给你适度的改进，但这些会累积起来。它们是对更关键的优化（如形状和内存 I/O）的一个很好的补充。但请注意，如果您的条件发生变化，专门化可能会对您不利，因此在应用此方法时要小心。
+
+> 分支预测和无分支代码:
+> 从代码中删除分支可以非常有效地提高性能。有关分支预测器的更多细节，请阅读经典的堆栈溢出回答[为什么处理排序数组更快](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array)。
+
+## 10 数据结构
+
+我不会详细介绍数据结构，因为它们需要单独的文章。但是请注意，为您的用例使用不正确的数据结构可能会产生比上述任何优化更大的影响。我建议你熟悉像 Map 和 Set 这样的本地工具，并了解链表，优先级队列，树（RB 和 B+）和尝试。
+
+但是作为一个简单的例子，让我们比较一下 Array.includes 和 Set.has 对于一个小列表：
+
+```js
+// setup:
+const userIds = Array.from({ length: 1_000 }).map((_, i) => i);
+const adminIdsArray = userIds.slice(0, 10);
+const adminIdsSet = new Set(adminIdsArray);
+```
+
+```js
+// 1. Array
+let _ = 0;
+for (let i = 0; i < userIds.length; i++) {
+  if (adminIdsArray.includes(userIds[i])) {
+    _ += 1;
+  }
+}
+```
+
+```js
+// 2. Set
+let _ = 0;
+for (let i = 0; i < userIds.length; i++) {
+  if (adminIdsSet.has(userIds[i])) {
+    _ += 1;
+  }
+}
+```
+
+基准测试结果：
+
+- 1. Array: 34.27%
+- 2. Set: 100%
+
+正如您所看到的，数据结构的选择会产生非常重要的影响。
+
+作为一个现实世界的例子，我有一个案例，我们能够通过切换一个带有链表的数组来[将函数的运行时间从 5 秒减少到 22 毫秒](https://github.com/mui/mui-x/pull/9200)。
