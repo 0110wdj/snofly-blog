@@ -701,7 +701,7 @@ String 对象是不可变的，在 String 类中每一个看起来会修改 Stri
     System.out.println(s1**s3); // true
     String s2 = new String(“abc");
     String s4 = new String(“abc");
-    System.out.println(s2**s4); // false
+    System.out.println(s2===s4); // false
     System.out.println(s2.equals(s4)); // true
 //String类对eqauls方法进行了覆盖，比较两个字符串对象的内容是否相同
 ```

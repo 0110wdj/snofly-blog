@@ -3,7 +3,7 @@ title: "软件体系结构"
 published: 2020-03-06
 description: ""
 image: ""
-tags: ["computer"]
+tags: []
 category: "计算机基础"
 draft: false
 ---
