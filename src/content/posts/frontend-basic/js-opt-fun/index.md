@@ -826,9 +826,11 @@ const result = classNames
 
 #### 我应该怎么办？
 
-一般来说，尽可能长时间地避免突变。这包括.trim（）、.replace（）等方法。考虑一下如何避免这些方法。在某些引擎中，字符串模板也可能比+慢。目前在 V8 中是这样的，但将来可能不会，所以基准测试。
+一般来说，**尽量避免突变**。这包括 .trim() .replace() 等方法。考虑一下如何避免这些方法。在某些引擎中，字符串模板也可能比 + 操作慢。目前在 V8 中是这样的，但将来可能不会，所以还得靠基准测试。
 
-关于上面的 SlicedString 的注意事项，您应该注意，如果内存中有一个非常大字符串的小子字符串，它可能会阻止垃圾收集器收集大字符串！如果您正在处理大文本并从中提取小字符串，则可能会泄漏大量内存。
+关于上面的 SlicedString 的注意事项：如果我们使用的字符串，是内存中的一个非常大的字符串的子字符串，它可能会阻止 gc 收集大字符串！
+
+如果你正在处理大文本并从中提取小字符串，则可能会泄漏大量内存。
 
 ```js
 const large = Array.from({ length: 10_000 })
@@ -838,17 +840,19 @@ const small = large.slice(0, 50);
 //    ^ will keep `large` alive
 ```
 
-解决办法是利用变异方法。如果我们在小指针上使用其中一个指针，它将强制复制，并且旧的指向大指针将丢失：
+这里的解决方案是使用对我们有利的变异方法。
+
+如果我们改变小字符串的一个字符，那么小字符串将被强制复制，并且原来指向大字符串的指针将丢失：
 
 ```js
 // replace a token that doesn't exist
 const small = small.replace("#".repeat(small.length + 1), "");
 ```
 
-有关更多细节，请参阅 [V8 中的 string.h](https://github.com/v8/v8/blob/main/src/objects/string.h) 或 [JavaScriptCore 中的 jstring.h](https://github.com/WebKit/WebKit/blob/main/Source/JavaScriptCore/runtime/JSString.h)。
+有关更多细节，请参阅 [V8 中的 string.h](https://github.com/v8/v8/blob/main/src/objects/string.h) 或 [JavaScriptCore 中的 JSString.h](https://github.com/WebKit/WebKit/blob/main/Source/JavaScriptCore/runtime/JSString.h)。
 
-> 关于字符串复杂度:
-> 我已经快速浏览了一些东西，但是有很多实现细节增加了字符串的复杂性。每种字符串表示通常都有最小长度。例如，连接字符串可能不适用于非常小的字符串。有时也有限制，例如避免指向子字符串的子字符串。阅读上面链接的 c++文件可以很好地了解实现细节，即使只是阅读注释。
+> 关于字符串复杂性:
+> 我很快浏览了一遍，但是有很多实现细节增加了字符串的复杂性。每种字符串表示通常都有最小长度。例如，连接字符串可能不适用于非常小的字符串。或者有时存在限制，例如避免指向子字符串的子字符串。阅读上面链接的 c++ 文件可以很好地了解实现细节 —— 即使只是阅读注释。
 
 ## 9 使用专业化
 
