@@ -854,11 +854,11 @@ const small = small.replace("#".repeat(small.length + 1), "");
 > 关于字符串复杂性:
 > 我很快浏览了一遍，但是有很多实现细节增加了字符串的复杂性。每种字符串表示通常都有最小长度。例如，连接字符串可能不适用于非常小的字符串。或者有时存在限制，例如避免指向子字符串的子字符串。阅读上面链接的 c++ 文件可以很好地了解实现细节 —— 即使只是阅读注释。
 
-## 9 使用专业化
+## 9 使用专业化(specialization)
 
-性能优化中的一个重要概念是专门化：调整逻辑以适应特定用例的约束。这通常意味着找出哪些条件可能对您的情况为真，并针对这些条件进行编码。
+性能优化中的一个重要概念是专业化：调整代码逻辑以适应特定用例的约束。这通常意味着弄清楚哪些条件可能适合你的例子，并针对这些条件进行编码。
 
-假设我们是一个商家，有时需要在他们的产品列表中添加标签。根据经验，我们知道标签通常是空的。知道了这些信息，我们就可以针对这种情况对函数进行专门化：
+假设我们是一个商家，有时需要将标签添加到产品列表中。根据经验，我们知道标签通常是空的。知道了这些信息，我们就可以针对这种情况对函数进行专门的优化：
 
 ```js
 // setup:
@@ -868,7 +868,7 @@ const someTags = {
 };
 const noTags = {};
 
-// Turn the products into a string, with their tags if applicable
+// 将产品转换成字符串，再加上可能存在的标签
 function productsToString(description, tags) {
   let result = "";
   description.forEach((product) => {
@@ -879,11 +879,9 @@ function productsToString(description, tags) {
   return result;
 }
 
-// Specialize it now
+// 现在来优化一下啊
 function productsToStringSpecialized(description, tags) {
-  // We know that `tags` is likely to be empty, so we check
-  // once ahead of time, and then we can remove the `if` check
-  // from the inner loop
+  // 我们知道 `tags` 很可能是空的，所以我们提前检查一次，然后我们就可以从内部循环中删除 `if` 检查
   if (isEmpty(tags)) {
     let result = "";
     description.forEach((product) => {
@@ -935,7 +933,9 @@ for (let i = 0; i < 100; i++) {
 - 1. not specialized: 85.71%
 - 2. specialized: 100%
 
-这种类型的优化可以给你适度的改进，但这些会累积起来。它们是对更关键的优化（如形状和内存 I/O）的一个很好的补充。但请注意，如果您的条件发生变化，专门化可能会对您不利，因此在应用此方法时要小心。
+这种类型的优化可以只给你适度的改进，但这些会累积起来。它们是对更关键的优化(如形状和内存 I/O)的一个很好的补充。
+
+但请注意，一旦条件发生变化，反而可能造成负面效果，因此在应用此方法时要小心。
 
 > 分支预测和无分支代码:
 > 从代码中删除分支可以非常有效地提高性能。有关分支预测器的更多细节，请阅读经典的堆栈溢出回答[为什么处理排序数组更快](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array)。
