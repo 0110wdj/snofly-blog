@@ -706,19 +706,21 @@ eval 的另一个好的用例可能是编译一个过滤器谓词函数，在该
 
 ## 8 谨慎使用字符串
 
-我们已经在前文看到字符串比它们看起来的。
+我们已经在前文看到字符串比它们表面上开销更大。
 
-这里我有一个好消息和一个坏消息，我将按照唯一的逻辑顺序宣布（先坏后好）：字符串比它们看起来更复杂，但它们也可以非常有效地使用。
+现在我有一个好消息和一个坏消息，总所周知，当然是先说坏消息：字符串比它们看起来更复杂。然后是好消息：但它们也可以非常有效地被使用。
 
-基于上下文关系，字符串操作是 JavaScript 的核心部分。
+基于上下文关系，字符串的操作是 JavaScript 的核心部分。
 
-为了优化字符串较多的代码，引擎必须具有创造性。
+为了优化存在大量字符串的代码，JS 引擎的作法必须具有创造性。
 
-我的意思是，他们必须用 c++ 中的多个字符串表示来表示 String 对象，这取决于用例。
+我的意思是，他们必须根据实际情况，使用 c++ 中的"多字符串形式"(multiple string representation)来表示 String 对象。
 
-有两种情况你应该担心，因为它们适用于 V8（到目前为止最常见的引擎），通常也适用于其他引擎。
+这里有两种一般情况值得关注，因为它们适用于 V8(到目前为止最常见的引擎)，通常也适用于其他引擎。
 
-首先，与+连接的字符串不会创建两个输入字符串的副本。该操作创建一个指向每个子字符串的指针。如果是打字的话，应该是这样的：
+**首先**，用 + 连接字符串的操作，不会创建两个输入字符串的副本，而是创建一个指向每个子字符串的指针。
+
+如果是 typescript 中的话，应该是这样的：
 
 ```js
 class String {
@@ -751,11 +753,13 @@ function concat(left, right) {
 const first = new BytesString(['H', 'e', 'l', 'l', 'o', ' '])
 const second = new BytesString(['w', 'o', 'r', 'l', 'd'])
 
-// See ma, no array copies!
+// 看嘛，没有真的复制!
 const message = concat(first, second)
 ```
 
-其次，字符串切片也不需要创建副本：它们可以简单地指向另一个字符串中的范围。继续上面的例子：
+**其次**，字符串切片的操作，也不需要创建副本：它们可以简单地指向另一个字符串中的范围。
+
+继续用上面的例子：
 
 ```js
 class SlicedString {
@@ -773,31 +777,30 @@ function substring(source, start, end) {
   return new SlicedString(source, start, end);
 }
 
-// This represents "He", but it still contains no array copies.
-// It's a SlicedString to a ConcatenatedString to two BytesString
+// 这能表示 "He"，但它仍然不包含任何数据副本。
 const firstTwoLetters = substring(message, 0, 2);
 ```
 
-但这里有一个问题：一旦你需要开始改变这些字节，那就是你开始支付复制成本的时刻。假设我们回到 String 类并尝试添加一个。trimend 方法：
+但这里有一个问题：一旦你需要去改变这些 bytes，那么就是开销复制成本的时刻。
+
+让我们回顾 String 类，然后尝试添加一个 .trimend 方法：
 
 ```js
 class String {
   abstract value(): char[] {}
 
   trimEnd() {
-    // `.value()` here might be calling
-    // our Sliced->Concatenated->2*Bytes string!
     const bytes = this.value()
-
     const result = bytes.slice()
-    while (result[result.length - 1] === ' ')
+    while (result[result.length - 1] === ' '){
       result.pop()
+    }
     return new BytesString(result)
   }
 }
 ```
 
-那么让我们跳到一个例子，在这个例子中，我们比较了使用突变和只使用连接的操作：
+那么让我们来看一个例子，在这个例子中，我们比较了**使用突变操作**和**只使用连接操作**：
 
 ```js
 // setup:
