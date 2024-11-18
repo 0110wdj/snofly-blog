@@ -1,6 +1,6 @@
 ---
 title: 从兴趣和收益的角度优化 javascript 代码
-published: 2024-10-21
+published: 2024-11-18
 description: ""
 image: ""
 tags: ["js", "翻译"]
