@@ -1057,21 +1057,23 @@ for (let i = 0; i < 100_000; i++) {
 
 ### 12.2 样品分析 vs 结构分析
 
-浏览器分析工具是基于样本的分析工具，它定期对您的堆栈进行采样。这有一个很大的缺点：在这些样本之间可能会调用非常小但非常频繁的函数，并且可能在您将得到的堆栈图中被低估。使用带有自定义采样间隔的 Firefox 开发工具或带有 CPU 节流的 Chrome 开发工具来缓解此问题。
+浏览器分析工具(profiling tools)是基于样本的分析工具，它定期对你的堆栈进行采样。
 
-### 12.3 行业工具
+这有一个很大的缺点：在这些样本之间可能会调用非常小但非常频繁的函数，并且可能在你得到的堆栈图中被严重低估。
+
+可以使用 Firefox 开发者工具并设置自定义采样间隔，或使用 Chrome 开发者工具的 CPU 降速功能来缓解这个问题。
+
+### 12.3 业内工具
 
 除了常规的浏览器开发工具，了解这些选项可能会有所帮助：
 
-- Chrome 开发工具有相当多的实验标志，可以帮助你找出为什么事情是缓慢的。当你需要在浏览器中调试样式/布局重新计算时，样式无效跟踪器是无价的。
-  [https://github.com/iamakulov/devtools-perf-features](https://github.com/iamakulov/devtools-perf-features)
+- Chrome 开发工具有很多[实验性选项](https://github.com/iamakulov/devtools-perf-features)，可以帮助你找出性能缓慢的原因。样式失效跟踪器在需要调试浏览器中的样式或布局重新计算时非常有用。
 
-- deoptexplorer-vscode 扩展允许您加载 V8/chromium 日志文件以了解代码何时触发非优化，例如当您将不同的形状传递给函数时。您不需要扩展来读取日志文件，但它使体验更加愉快。
-  [https://github.com/microsoft/deoptexplorer-vscode](https://github.com/microsoft/deoptexplorer-vscode)
+- [deoptexplorer-vscode](https://github.com/microsoft/deoptexplorer-vscode) 扩展允许你加载 V8/chromium 日志文件以了解代码何时触发去优化，比如当你将不同的结构传递给函数的时候。虽然你不用该扩展也可以读取日志文件，但它让体验更加友好。
 
-- 您总是可以为每个 JS 引擎编译调试 shell，以便更详细地了解它是如何工作的。这允许您运行 perf 和其他低级工具，还可以检查每个引擎生成的字节码和机器码。
+- 你可以为每个 JS 引擎编译 debug shell，以此更详细地了解其工作原理。这样可以运行 perf 等底层工具，还可以检查每个引擎生成的字节码和机器代。
   [V8 示例](https://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html#getting-the-code)|[示例 JSC 示例](https://zon8.re/posts/jsc-internals-part1-tracing-js-source-to-bytecode/)|示例 SpiderMonkey
 
-## 最后指出
+## 最后
 
 希望你学到了一些有用的技巧。如果你有任何评论、更正或问题，请在页脚发电子邮件。我总是很高兴收到读者的反馈或问题。
