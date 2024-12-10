@@ -17,6 +17,7 @@ const options = [
   {
     value: "packjson",
     label: "packjson 解码与编码",
+    default: true,
   },
   {
     value: "hex",
@@ -45,7 +46,9 @@ const options = [
 ];
 
 export default function Home() {
-  const [selected, setSelected] = useState(["javamap", "packjson"]);
+  const [selected, setSelected] = useState(
+    options.filter((i) => i.default).map((i) => i.value)
+  );
   return (
     <div class="flex flex-wrap flex-col items-center">
       <h2>选择功能组件</h2>
