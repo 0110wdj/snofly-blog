@@ -70,9 +70,6 @@ export async function unpack_patch(data) {
     throw error
   }
 
-  // 打印解压后的数据以进行调试
-  console.log('Decompressed data:', decompressed)
-
   // 将解压后的 Uint8Array 转换为 Blob，再转换为 ArrayBuffer
   const chunks = []
   const stream = new ReadableStream({
@@ -194,34 +191,16 @@ export async function pack(
   /** @type {{[key:string]:boolean}} */ pack_string_keys = {},
 ) {
   const packed = to_pack_value(v, pack_string_keys)
-  // console.log("packed", packed);
-
-  // await fs.writeFile("/root/packet_tree.pack.json", JSON.stringify(packed, null, "  "), 'utf-8');
-
   const mp = encode(packed)
 
-  const input = new ReadableStream({
-    start(controller) {
-      controller.enqueue(mp)
-      controller.close()
-    },
-  })
-  const output = input.pipeThrough(new CompressionStream('gzip'))
-  const chunks = []
-  const rd = output.getReader()
-  while (true) {
-    const r = await rd.read()
-    if (r.done) {
-      break
-    }
-    chunks.push(r.value)
-  }
-  const blob = new Blob(chunks)
+  // 使用 pako 进行 gzip 压缩
+  const compressed = pako.gzip(mp) // pako.gzip 默认使用 deflate 压缩数据
+  // 将压缩后的数据转为 Blob
+  const blob = new Blob([compressed])
 
   function blobToBase64(blob) {
     return new Promise((resolve, _) => {
       const reader = new FileReader()
-      // reader.onloadend = () => resolve(reader.result);
       reader.onloadend = () => resolve(reader.result.split(',')[1])
       reader.readAsDataURL(blob)
     })
