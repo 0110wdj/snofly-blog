@@ -1,4 +1,5 @@
 import { decode, encode } from '@msgpack/msgpack'
+import pako from 'pako'
 
 function from_pack_value(v) {
   if (!Array.isArray(v) || v.length !== 2) {
@@ -50,25 +51,51 @@ function from_pack_value(v) {
   }
 }
 
-export async function unpack_patch(/** @type {string} */ data) {
+/**
+ * Unpacks a patch from a base64 encoded gzip string.
+ * @param {string} data - The base64 encoded gzip data.
+ * @returns {Promise<any>} The unpacked patch value.
+ */
+export async function unpack_patch(data) {
+  // 创建一个 data URL 并获取原始数据
   const res = await fetch(`data:application/octet-stream;base64,${data}`)
-  const buf = await res.blob()
-  const de = buf.stream().pipeThrough(new DecompressionStream('gzip'))
-  const chunks = []
-  const rd = de.getReader()
-  while (true) {
-    const r = await rd.read()
-    if (r.done) {
-      break
-    }
-    chunks.push(r.value)
-  }
-  const blob = new Blob(chunks)
-  const buffer = await blob.arrayBuffer()
+  const buf = await res.arrayBuffer() // 获取 ArrayBuffer 格式的原始数据
 
-  // console.log(buffer);
+  // 使用 pako 解压 ArrayBuffer 数据，返回 Uint8Array
+  let decompressed
+  try {
+    decompressed = pako.inflate(new Uint8Array(buf)) // 解压成 Uint8Array
+  } catch (error) {
+    console.error('Decompression failed:', error)
+    throw error
+  }
+
+  // 打印解压后的数据以进行调试
+  console.log('Decompressed data:', decompressed)
+
+  // 将解压后的 Uint8Array 转换为 Blob，再转换为 ArrayBuffer
+  const chunks = []
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(decompressed) // 使用解压后的数据作为 Uint8Array
+      controller.close()
+    },
+  })
+
+  const reader = stream.getReader()
+  let result
+  while (true) {
+    result = await reader.read()
+    if (result.done) break
+    chunks.push(result.value)
+  }
+
+  // 将 chunks 组合成 Blob
+  const blob = new Blob(chunks)
+  const buffer = await blob.arrayBuffer() // 将 Blob 转换为 ArrayBuffer
+
+  // 进行解码
   const r = decode(buffer)
-  // console.log(r);
   return from_pack_value(r)
 }
 
