@@ -31,6 +31,7 @@
     "astro-icon": "1.1.0",
     "axios": "^1.6.8",
     "colorjs.io": "^0.5.0",
+    "json-string-pack": "^1.0.3",
     "markdown-it": "^14.1.0",
     "mdast-util-to-string": "^4.0.0",
     "overlayscrollbars": "^2.6.1",

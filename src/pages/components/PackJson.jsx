@@ -1,6 +1,6 @@
 import { Button, Input, message } from 'antd'
+import { pack, unpack } from 'json-string-pack'
 import React, { useState } from 'react'
-import { pack, unpack_patch } from './lib/pack_json'
 
 const PackJson = () => {
   const [base64, setBase64] = useState('')
@@ -19,7 +19,7 @@ const PackJson = () => {
           <Button
             onClick={async () => {
               try {
-                const res = await unpack_patch(base64)
+                const res = await unpack(base64)
                 setJSONStr(JSON.stringify(res))
                 message.info('解码成功，按 F12 后在控制台查看详情！')
                 console.log(res)
