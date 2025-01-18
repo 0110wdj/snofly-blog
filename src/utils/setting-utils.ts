@@ -1,19 +1,14 @@
-import {
-  AUTO_MODE,
-  DARK_MODE,
-  DEFAULT_THEME,
-  LIGHT_MODE,
-} from '@constants/constants.ts'
+import {AUTO_MODE, DARK_MODE, DEFAULT_THEME, LIGHT_MODE} from "@constants/constants.ts";
 
 export function getDefaultHue(): number {
   const fallback = '250'
   const configCarrier = document.getElementById('config-carrier')
-  return Number.parseInt(configCarrier?.dataset.hue || fallback)
+  return parseInt(configCarrier?.dataset.hue || fallback)
 }
 
 export function getHue(): number {
   const stored = localStorage.getItem('hue')
-  return stored ? Number.parseInt(stored) : getDefaultHue()
+  return stored ? parseInt(stored) : getDefaultHue()
 }
 
 export function setHue(hue: number): void {
@@ -29,16 +24,16 @@ export function setTheme(theme: string): void {
   localStorage.setItem('theme', theme)
   switch (theme) {
     case LIGHT_MODE:
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
       break
     case DARK_MODE:
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
       break
     case AUTO_MODE:
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark')
+        document.documentElement.classList.add('dark');
       } else {
-        document.documentElement.classList.remove('dark')
+        document.documentElement.classList.remove('dark');
       }
       break
   }

@@ -1,42 +1,44 @@
 <script lang="ts">
-import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from '@constants/constants.ts'
+
+import Icon from "@iconify/svelte"
+import {i18n} from '@i18n/translation'
 import I18nKey from '@i18n/i18nKey'
-import { i18n } from '@i18n/translation'
-import Icon from '@iconify/svelte'
-import { onMount } from 'svelte'
-import { getStoredTheme, setTheme } from '../utils/setting-utils.ts'
+import {setTheme, getStoredTheme} from '../utils/setting-utils.ts'
+import {onMount} from "svelte";
+import {AUTO_MODE, DARK_MODE, LIGHT_MODE} from "@constants/constants.ts";
 
 const seq = [LIGHT_MODE, DARK_MODE, AUTO_MODE]
 let mode = AUTO_MODE
 
 onMount(() => {
-  mode = getStoredTheme()
+    mode = getStoredTheme()
 })
 
 function switchScheme(newMode: string) {
-  mode = newMode
-  setTheme(newMode)
+    mode = newMode
+    setTheme(newMode)
 }
 
 function toggleScheme() {
-  let i = 0
-  for (; i < seq.length; i++) {
-    if (seq[i] === mode) {
-      break
+    let i = 0
+    for (; i < seq.length; i++) {
+        if (seq[i] === mode) {
+            break
+        }
     }
-  }
-  switchScheme(seq[(i + 1) % seq.length])
+    switchScheme(seq[(i + 1) % seq.length])
 }
 
 function showPanel() {
-  const panel = document.querySelector('#light-dark-panel')
-  panel.classList.remove('float-panel-closed')
+    const panel = document.querySelector('#light-dark-panel')
+    panel.classList.remove('float-panel-closed')
 }
 
 function hidePanel() {
-  const panel = document.querySelector('#light-dark-panel')
-  panel.classList.add('float-panel-closed')
+    const panel = document.querySelector('#light-dark-panel')
+    panel.classList.add('float-panel-closed')
 }
+
 </script>
 
 <!-- z-50 make the panel higher than other float panels -->
