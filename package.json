@@ -10,6 +10,7 @@
     "astro": "astro",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
+    "echo": "echo 'git hook pre-commit'",
     "lint": "biome check --apply ./src"
   },
   "dependencies": {
