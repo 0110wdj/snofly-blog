@@ -2,6 +2,7 @@ import protobuf from 'protobufjs'
 const util = protobuf.util
 
 const protoContent = `
+// 指定protobuf的版本proto3
 syntax = "proto3";
 package server_interface;
 
@@ -30,6 +31,7 @@ message Chart {
     repeated MonitorStatus monitor_status = 5;
     int32 send_packet_bytes = 6;
     int32 receive_packet_bytes = 7;
+    repeated RoundTick rounds = 8;
 }
 
 message Charts {
@@ -44,6 +46,9 @@ message RoundTick {
     int32 send_packet_bytes = 3;
     int32 receive_packet_bytes = 4;
     repeated MonitorStatus monitor_status = 5;
+    int32 scene_id = 6;
+    int32 sub_scene_id = 7;
+    int32 name_path_index = 8;
 }
 
 message Problem {
