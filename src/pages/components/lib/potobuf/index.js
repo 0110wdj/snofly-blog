@@ -49,6 +49,7 @@ message RoundTick {
     int32 scene_id = 6;
     int32 sub_scene_id = 7;
     int32 name_path_index = 8;
+    int32 strategy_index = 9;
 }
 
 message Problem {
@@ -109,5 +110,8 @@ export const protbufDecode = (base64, target = 'Events') => {
       }
     }
   }
-  return message
+  const object = MyMessage.toObject(message, {
+    defaults: true, // includes default values
+  })
+  return object
 }
