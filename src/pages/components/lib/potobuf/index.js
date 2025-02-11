@@ -38,6 +38,11 @@ message Charts {
     int32 start_time = 1;
     repeated string monitor_units = 2;  //["延迟(ms)",...] 长度同monitor_status相等
     repeated Chart ticks = 3;
+    message NamePath {
+        repeated string name_path = 1;
+    }
+    repeated NamePath name_path_list = 4;
+    repeated string strategy_list = 5;
 }
 
 message RoundTick {
