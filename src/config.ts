@@ -34,11 +34,11 @@ export const navBarConfig: NavBarConfig = {
     LinkPreset.About,
     LinkPreset.Talk,
     LinkPreset.Kits,
-    {
-      name: '资源',
-      url: 'http://www.snofly.cn:8081/',
-      external: true,
-    },
+    // {
+    //   name: '资源',
+    //   url: 'http://www.snofly.cn:8081/',
+    //   external: true,
+    // },
   ],
 }
 
