@@ -109,7 +109,7 @@ normal 表示其内都是正常邮件（个人笔记、好友消息等），spam
 从 normal 和 spam 中各取一份文件展示一下：
 
 <details>
-  <summary>某个 normal 文件</summary>
+  <summary>data/normal 文件 274.txt</summary>
 
 ```txt
 Return-Path: <chi@rbl.ccert.edu.cn>
@@ -148,53 +148,38 @@ X-UIDL: )+[!!?A)"!%/l"!~XO"!
 </details>
 
 <details>
-  <summary>某个 spam 文件</summary>
+  <summary>data/spam 文件 793.txt</summary>
 
 ```
-Return-Path: <yi@yahoo.com>
-Received: from yahoo.com ([221.221.213.41])
-	by spam-gw.ccert.edu.cn (MIMEDefang) with ESMTP id j6RBIx8f032074
-	for <qing@ccert.edu.cn>; Wed, 27 Jul 2005 19:19:03 +0800 (CST)
-Message-ID: <200507271919.j6RBIx8f032074@spam-gw.ccert.edu.cn>
-From: yi@yahoo.com
-Subject: =?gb2312?B?MzAw1Kq9qM341b4tsbG+qQ==?=
-To: qing@ccert.edu.cn
+Return-Path: <qian@163.com>
+Received: from 163.com ([61.144.65.194])
+	by spam-gw.ccert.edu.cn (MIMEDefang) with ESMTP id j6ALQwsR008055
+	for <han@ccert.edu.cn>; Mon, 11 Jul 2005 05:26:59 +0800 (CST)
+Message-ID: <200507110526.j6ALQwsR008055@spam-gw.ccert.edu.cn>
+From: =?GB2312?B?wda6ow==?= <qian@163.com>
+Subject: =?gb2312?B?1sKjqL6twO0vssbO8aOpytWjug==?=
+To: han@ccert.edu.cn
 Content-Type: text/plain;charset="GB2312"
-Date: Wed, 27 Jul 2005 19:33:31 +0800
+Reply-To: qian@163.com
+Date: Mon, 11 Jul 2005 05:40:52 +0800
 X-Priority: 3
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-Mailer: Foxmail 4.2 [cn]
 
-300元建网站-北京
+*******************广州市兴地贸易有限公司*********************
 
-为您提供现场服务
+(负责人/经理/财务）您好：
+    本公司代理多家公司操作帐务，具有丰富财务经验.可向贵司提供：
+（普通销售/服务行业/广告行业/建筑行业/运输行业）发票，只收2%
+的税点。若有意，请联系！
 
-综合布线、IC卡门禁与考勤、无限网络与员工监控、网站设计及维护...
-只要300元/月，省心又省力，您不动心吗？
+            联 系 人：林海
+            联系电话：020-31946660    13824444525
 
+承诺：发票一律通过正规手续从税务局办理领购，保证随时查询验证。
 
-东方IT-电脑救援与网管租赁合作倡议书
+本邮件属群发邮件对你造成不便敬请原谅！！
 
-
-尊敬的公司负责人：
-
-    我是北京东方IT公司（www.dfit.com.cn/yjy）电脑救援救援俱乐部，面向北京地区广大企、事业单位提供网络安全与出租网管（专职或兼职）人员，您每个月只需要花300元，就可以拥有每月工作4天、随叫随到的属于自己的高水平网管。真正高水准贴心的服务，现已有企事业单位580家之多，比如：麦当劳、司法部法律援助中心、甘家口大厦、北京残疾人联合会、上海电力驻京办、苏州市人民政府驻京办、中国农大生物学院、海开大厦、中国农业生产资料集团、北京商务金融职业学校、时代光华、温地国际中国办事处、西班牙洛拉门迪驻京办、天津阿斯化学驻京办、尚构投资顾问有限公司、京泰大厦、西城区工商局、中国阳光投资公司、北京艾迪尔建筑、英国儿童基金会等等。
-    这个网管编制上属于贵公司，同时将以高水平和真正的职业精神为您完成下面事务：
-    1、综合布线；2、IC卡门禁与考勤；3、无限网络与员工监控；4、网站设计及维护；4、网络管理；5、网络设备维护；6、单机故障诊断； 7、反病毒；8、防黑客攻击；9、电脑维修及维护；10、企业宽带上网；11、定期维护（数据备份、数据整理、故障排除、硬件清洗等）......
-
-    您现在聘用的网管所干的事情，我们出租的网管比他干得更好，更规范，更可靠！
-
-    干得更好：我们出租的网管工程师全部受过职业网管培训，熟悉网络设备和软、硬件技术，并拥有成熟的工作经验，可以灵活处理各种网络、计算机问题。
-
-    更规范：我们对网络管理常见的数百个问题进行归类整理，形成IT业界绝无独有的知识库，每天对网络工程师轮番培训，使他们的管理更加规范。
-
-    更可靠：我们用我们公司的商誉和出租工程师的技能为您提供双重担保，彻底免除企业后顾之忧。
-
-
-联系人：毛先生
-电话：010-62817129
-地址：北京海淀区圆明园西路2号北京5109信箱（邮编：100094）
-网址：www.dfit.com.cn或www.dfit.net
-Email:mhb@dfit.net
+************************欢迎来电咨询****************************
 ```
 
 </details>
@@ -268,9 +253,250 @@ Email:mhb@dfit.net
 
 </details>
 
-基于中文停用词表，可以对上面的文本进行切割，最后得到**有意义的部分**，也就是能代表整个语句的**特征向量**。
+通过中文停用词表，可以对**分词**之后的文本进行过滤，最后得到**有意义的部分**，也就是能代表整个语句的**特征向量**。
+
+> **分词释义**: 将文本按照预设的语法规则进行分割。举例：
+
+| 序号 | 原文                 | 正向最长匹配                                 | 逆向最长匹配                                 | 双向最长匹配                                 |
+| ---- | -------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| 1    | 项目的研究           | ['项目', '的', '研究']                       | ['项', '目的', '研究']                       | ['项', '目的', '研究']                       |
+| 2    | 商品和服务           | ['商品', '和服', '务']                       | ['商品', '和', '服务']                       | ['商品', '和', '服务']                       |
+| 3    | 研究生命起源         | ['研究生', '命', '起源']                     | ['研究', '生命', '起源']                     | ['研究', '生命', '起源']                     |
+| 4    | 当下雨天地面积水     | ['当下', '雨天', '地面', '积水']             | ['当', '下雨天', '地面', '积水']             | ['当下', '雨天', '地面', '积水']             |
+| 5    | 结婚的和尚未结婚的   | ['结婚', '的', '和尚', '未', '结婚', '的']   | ['结婚', '的', '和', '尚未', '结婚', '的']   | ['结婚', '的', '和', '尚未', '结婚', '的']   |
+| 6    | 欢迎新老师生前来就餐 | ['欢迎', '新', '老师', '生前', '来', '就餐'] | ['欢', '迎新', '老', '师生', '前来', '就餐'] | ['欢', '迎新', '老', '师生', '前来', '就餐'] |
 
 > 当某个文本拥有类似的特征向量时，也就能类似的认为，该文本具有相同的结论——比如都是垃圾邮件。
+
+### 2.2.2 编码实现
+
+代码步骤如下：
+
+- 1、读取中文停用词表，构造一个过滤字符的字符串数组；
+- 2、读取某个文件，排除文件的非中文部分；
+- 3、对中文文本进行分词，得到一个字符串数组（这就是描述该文件的特征向量）；
+- 4、生成一个新的文件，存储特征向量字符串；
+- 5、重复 2 ～ 4 步骤，得到全部文件的特征向量文件。
+
+> 笔者原本打算使用 python 代码来表示，但是<a href="/files/nlp/pythonCode.zip" target="_blank">源代码</a>是 2019 年写，既没有输出中间结果(特征向量放内存里面了)，又多了模型评估的部分，不太适合本文的节奏，所以现在改用 nodejs 重写一遍。
+
+在 data 文件夹的同级目录下创建 vector 文件夹，并在其中创建 spam 和 normal 文件夹。
+
+在 data 文件夹的同级目录下创建 vector.js 文件。
+
+此时的文件结构是这样的：
+
+```bash
+➜  emailCode tree -L 2
+.
+├── data
+│   ├── normal
+│   ├── spam
+│   ├── test
+│   └── 中文停用词表.txt
+├── vector
+│   ├── normal
+│   └── spam
+└── vector.js
+
+8 directories, 2 files
+```
+
+其中 vector.js 代码如下：
+
+```js
+// vector.js
+const fs = require("fs");
+const iconv = require("iconv-lite");
+const path = require("path");
+const nodejieba = require("nodejieba");
+
+function filterNonChinese(str) {
+  return str.replace(/[^\u4e00-\u9fa5]/g, "");
+}
+
+function generateVector(sourceDirPath, outDirPath, stpoWords) {
+  const files = fs.readdirSync(sourceDirPath);
+  // 遍历每个文件并读取它们的内容
+
+  files.forEach((file, index) => {
+    const filePath = path.join(sourceDirPath, file);
+    // 读取文件内容
+    const buffer = fs.readFileSync(filePath);
+    const fileContent = iconv.decode(buffer, "gbk");
+    // 匹配非中文字符并删除
+    const fileChineseContent = filterNonChinese(fileContent);
+    // 根据 nodejieba 进行分词
+    const tokens = nodejieba.cut(fileChineseContent);
+    // 根据停用词表进行过滤
+    const filteredData = tokens.filter((item) => !stpoWords.includes(item));
+    // 将结果写入文件中保存
+    fs.writeFileSync(
+      path.join(outDirPath, file),
+      filteredData.join("\n"),
+      "utf8"
+    );
+    console.log(`处理完成：${index + 1}/${files.length}`);
+  });
+}
+
+// 构造一个分割字符的字符串数组
+const buffer = fs.readFileSync("./data/中文停用词表.txt");
+const fileContent = iconv.decode(buffer, "gbk");
+const stpoWords = fileContent.split("\n");
+
+// 开始分割，输出在 vector 中
+generateVector("./data/normal", "./vector/normal", stpoWords);
+generateVector("./data/spam", "./vector/spam", stpoWords);
+```
+
+### 2.2.3 结果展示
+
+经过处理之后，以 2.2.1 节中的两个文件为例，展示一下输出结果：
+
+<details>
+  <summary>vector/normal 文件 274.txt</summary>
+
+```js
+[
+  "大三",
+  "恋情",
+  "维系",
+  "三年",
+  "越来越",
+  "知道",
+  "坚持",
+  "坚信",
+  "最",
+  "适合",
+  "人",
+  "一起",
+  "快乐",
+  "开学",
+  "分开",
+  "距离",
+  "拉开",
+  "美",
+  "相信",
+  "地久天长",
+  "放不下",
+  "身为",
+  "射手",
+  "女生",
+  "是不是",
+  "有点",
+  "名不副实",
+  "吵架",
+  "时间",
+  "居多",
+  "怀疑",
+  "是否",
+  "相爱",
+  "是否",
+  "在乎",
+  "对方",
+  "有时候",
+  "嘲笑",
+  "幼稚",
+  "脾气",
+  "忍不住",
+  "伤害",
+  "有时候",
+  "佩服",
+  "这么久",
+  "身边",
+  "出现",
+  "一些",
+  "人",
+  "最终",
+  "选择",
+  "一份",
+  "执着",
+  "天天",
+  "一起",
+  "恋人们",
+  "真的",
+  "幸福",
+  "珍惜",
+  "坚持",
+  "单身",
+  "恋人",
+  "想",
+];
+```
+
+</details>
+
+<details>
+  <summary>vector/spam 文件 793.txt</summary>
+
+```js
+[
+  "广州市",
+  "兴",
+  "贸易",
+  "有限公司",
+  "负责人",
+  "经理",
+  "财务",
+  "您好",
+  "公司",
+  "代理",
+  "多家",
+  "公司",
+  "操作",
+  "帐务",
+  "具有",
+  "丰富",
+  "财务",
+  "经验",
+  "贵",
+  "司",
+  "提供",
+  "普通",
+  "销售",
+  "服务行业",
+  "广告行业",
+  "建筑行业",
+  "运输",
+  "行业",
+  "发票",
+  "只",
+  "收",
+  "税",
+  "点",
+  "有意",
+  "请",
+  "联系",
+  "联系人",
+  "林海",
+  "联系电话",
+  "承诺",
+  "发票",
+  "一律",
+  "正规",
+  "手续",
+  "税务局",
+  "办理",
+  "领购",
+  "保证",
+  "随时",
+  "查询",
+  "验证",
+  "邮件",
+  "属",
+  "群",
+  "发邮件",
+  "造成",
+  "不便",
+  "敬请原谅",
+  "欢迎",
+  "来电",
+  "咨询",
+];
+```
+
+</details>
 
 ## 2.3 模型训练
 
