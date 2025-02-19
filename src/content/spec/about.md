@@ -17,8 +17,8 @@
 
 ## 兴趣爱好
 
-- 游戏：炉石传说、GTAV、王者荣耀、塞尔达传说
-- 阅读：逆天爽文、名著传记
+- 游戏：炉石传说、GTAV、塞尔达传说
+- 阅读：散文小说、名著传记
 - 艺术：美食、美景、美人
 - 科研：逻辑推导、代码优雅
 - 运动：慢跑、骑行
@@ -29,12 +29,12 @@
 
   - <img src="https://img.shields.io/badge/JavaScript-Senior-red" alt="JavaScript" style="display:inline-block;height:30px;" />
     <img src="https://img.shields.io/badge/css-Senior-red" alt="css" style="display:inline-block;height:30px;" />
+    <img src="https://img.shields.io/badge/git-Senior-red" alt="git"          style="display:inline-block;height:30px;" />
 
   - <img src="https://img.shields.io/badge/html-Medior-yellow" alt="html" style="display:inline-block;height:30px;" />
     <img src="https://img.shields.io/badge/react-Medior-yellow" alt="React" style="display:inline-block;height:30px;" />
     <img src="https://img.shields.io/badge/antd-Medior-yellow" alt="antd" style="display:inline-block;height:30px;" />
     <img src="https://img.shields.io/badge/ts/jsdoc-Medior-yellow" alt="ts/jsdoc" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/git-Medior-yellow" alt="git"          style="display:inline-block;height:30px;" />
     <img src="https://img.shields.io/badge/NodeJS-Medior-yellow" alt="NodeJS" style="display:inline-block;height:30px;" />
 
   - <img src="https://img.shields.io/badge/echarts-Junior-blue" alt="echarts" style="display:inline-block;height:30px;" />
