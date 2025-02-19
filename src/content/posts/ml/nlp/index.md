@@ -1,6 +1,6 @@
 ---
 title: 机器学习入门实践
-published: 2025-02-16
+published: 2025-02-19
 description: ""
 image: ""
 tags: ["NLP"]
@@ -20,7 +20,7 @@ draft: true
 - 2 了解**基于统计的自然语言处理**的原理
 - 3 理解**机器学习模型**的原理
 - 4 成功完成训练**机器学习模型**的实践
-- 5 理解并运用**模型评价指标**
+- 5 理解并运用**模型评价指标**(略)
 
 # 1 算法原理
 
@@ -315,6 +315,21 @@ function filterNonChinese(str) {
   return str.replace(/[^\u4e00-\u9fa5]/g, "");
 }
 
+function stringToVector(fileContent) {
+  // 构造一个分割字符的字符串数组
+  const buffer = fs.readFileSync("./data/中文停用词表.txt");
+  const fileText = iconv.decode(buffer, "gbk");
+  const stpoWords = fileText.split("\n");
+
+  // 匹配非中文字符并删除
+  const fileChineseContent = filterNonChinese(fileContent);
+  // 根据 nodejieba 进行分词
+  const tokens = nodejieba.cut(fileChineseContent);
+  // 根据停用词表进行过滤
+  const filteredData = tokens.filter((item) => !stpoWords.includes(item));
+  return filteredData;
+}
+
 function generateVector(sourceDirPath, outDirPath, stpoWords) {
   const files = fs.readdirSync(sourceDirPath);
   // 遍历每个文件并读取它们的内容
@@ -324,30 +339,26 @@ function generateVector(sourceDirPath, outDirPath, stpoWords) {
     // 读取文件内容
     const buffer = fs.readFileSync(filePath);
     const fileContent = iconv.decode(buffer, "gbk");
-    // 匹配非中文字符并删除
-    const fileChineseContent = filterNonChinese(fileContent);
-    // 根据 nodejieba 进行分词
-    const tokens = nodejieba.cut(fileChineseContent);
-    // 根据停用词表进行过滤
-    const filteredData = tokens.filter((item) => !stpoWords.includes(item));
+    // 获得特征向量
+    const data = stringToVector(fileContent);
     // 将结果写入文件中保存
-    fs.writeFileSync(
-      path.join(outDirPath, file),
-      filteredData.join("\n"),
-      "utf8"
-    );
-    console.log(`处理完成：${index + 1}/${files.length}`);
+    fs.writeFileSync(path.join(outDirPath, file), data.join("\n"), "utf8");
+    console.log(`处理进度：${index + 1}/${files.length}`);
   });
 }
 
-// 构造一个分割字符的字符串数组
-const buffer = fs.readFileSync("./data/中文停用词表.txt");
-const fileContent = iconv.decode(buffer, "gbk");
-const stpoWords = fileContent.split("\n");
+function main(params) {
+  // 开始分割，输出在 vector 中
+  generateVector("./data/normal", "./vector/normal");
+  generateVector("./data/spam", "./vector/spam");
+}
 
-// 开始分割，输出在 vector 中
-generateVector("./data/normal", "./vector/normal", stpoWords);
-generateVector("./data/spam", "./vector/spam", stpoWords);
+// 执行一次这个
+// main();
+
+module.exports = {
+  stringToVector,
+};
 ```
 
 ### 2.2.3 结果展示
@@ -576,6 +587,8 @@ $$
 // train.js
 const fs = require("fs");
 const path = require("path");
+const { stringToVector } = require("./vector");
+const iconv = require("iconv-lite");
 
 /**
  *
@@ -600,17 +613,92 @@ function addMap(sourceDirPath, map) {
 }
 
 // 1、统计得到每个词语出现的次数、总词语个数
-
-console.log("===> start at:" + new Date());
 const normalWords = new Map();
 const spamWords = new Map();
 const normalWordsCount = addMap("./vector/normal", normalWords);
-const spamWordsLength = addMap("./vector/spam", spamWords);
-console.log("===> end at:" + new Date());
+const spamWordsCount = addMap("./vector/spam", spamWords);
 
 // 2、朴素贝叶斯算法——计算概率值
+function calProb(word) {
+  if (!normalWords.has(word) && !spamWords.has(word)) {
+    return 0.47;
+  }
+  const pw_n = normalWords.has(word)
+    ? normalWords.get(word) / normalWordsCount
+    : 0.01;
+  const pw_s = spamWords.has(word)
+    ? spamWords.get(word) / spamWordsCount
+    : 0.01;
+  ps_w = pw_s / (pw_s + pw_n);
+  return ps_w;
+}
+
+function calBayes(testVector) {
+  let ps_w = 1;
+  let ps_n = 1;
+  testVector.forEach((word) => {
+    const prob = calProb(word);
+    ps_w *= prob;
+    ps_n *= 1 - prob;
+  });
+  const p = ps_w / (ps_w + ps_n);
+  return p;
+}
+
+// 3、简单测试
+const testVector1 = stringToVector(
+  iconv.decode(fs.readFileSync("./data/normal/274.txt"), "gbk")
+);
+const testVector2 = stringToVector(
+  iconv.decode(fs.readFileSync("./data/spam/793.txt"), "gbk")
+);
+const testVector3 = stringToVector(
+  iconv.decode(fs.readFileSync("./data/test/1.txt"), "gbk")
+);
+const testVector4 = stringToVector(
+  iconv.decode(fs.readFileSync("./data/test/8000.txt"), "gbk")
+);
+
+console.log(calBayes(testVector1.slice(0, 15))); // 0.00327150967855315
+console.log(calBayes(testVector2.slice(0, 15))); // 1
+console.log(calBayes(testVector3.slice(0, 15))); // 9.756882688122813e-9
+console.log(calBayes(testVector4.slice(0, 15))); // 1
 ```
 
-### 2.3.3 结果展示
+### 2.3.3 代码解释
+
+- 函数 calProb
+
+传入参数是一个词语，返回值是一个概率值，表示“这个词语存在时，该邮件更倾向于垃圾邮件，或者更倾向于正常邮件”。
+
+pw_n 表示该词在所有 normal 邮件中出现的频率，如果不存在，设置经验值 0.01；
+pw_s 表示该词在所有 spam 邮件中出现的频率，如果不存在，设置经验值 0.01；
+ps_w 表示了一个倾向，经验值为 0.47；
+
+- 函数 calBayes
+
+传入值是需要判断的邮件的特征向量，返回值是一个概率值，表示“综合来看，该邮件是垃圾邮件的概率”。
+
+- 测试代码
+
+因为数字计算精度问题，所以只取了一部分看看效果。
 
 # 3 总结
+
+好啦，到这里告一段落，可以简单总结下。
+
+回顾本文目标：
+
+- 1 理解**朴素贝叶斯算法**原理
+- 2 了解**基于统计的自然语言处理**的原理
+- 3 理解**机器学习模型**的原理
+- 4 成功完成训练**机器学习模型**的实践
+- 5 理解并运用**模型评价指标**(略)
+
+主要内容都已经涉及到了。第 5 部分，可以使用 data 中 test 的数据去测试，它们的文件名称就是标记。
+
+我们可以看到，算法实现部分的代码是相对很少的，更多的是对数据的处理，构造更好的输入。这也侧面说明了，很多人选择使用 python 的原因就是它有非常多好用的数据处理的库。为了说明朴素贝叶斯算法的作用，我们就没有直接调用“贝叶斯库”这样的 API 。
+
+于是，我们可以基于现有的资料，向上包装一些业务代码，构建一个可执行文件。它的输入是邮件文本信息，输出是一个概率值。
+
+最后，我们可以得到一个简单的二分类器（判断是或否），也就是一个机器学习模型了。
