@@ -549,6 +549,33 @@ $$
 
 ### 2.3.2 算法实现
 
+在 data 文件夹的同级目录下创建 train.js 文件。
+
+此时的文件结构是这样的：
+
+```bash
+➜  emailCode tree -L 2
+.
+├── data
+│   ├── normal
+│   ├── spam
+│   ├── test
+│   └── 中文停用词表.txt
+├── train.js
+├── vector
+│   ├── normal
+│   └── spam
+└── vector.js
+
+8 directories, 3 files
+```
+
+其中 train.js 代码如下：
+
+```js
+// code
+```
+
 ### 2.3.3 结果展示
 
 # 3 总结
