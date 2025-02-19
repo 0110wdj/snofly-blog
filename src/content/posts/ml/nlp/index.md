@@ -573,7 +573,42 @@ $$
 其中 train.js 代码如下：
 
 ```js
-// code
+// train.js
+const fs = require("fs");
+const path = require("path");
+
+/**
+ *
+ * @param {string} sourceDirPath
+ * @param {Map} map
+ * @returns
+ */
+function addMap(sourceDirPath, map) {
+  let count = 0;
+  const files = fs.readdirSync(sourceDirPath);
+  files.forEach((file) => {
+    const filePath = path.join(sourceDirPath, file);
+    // 读取文件内容
+    const fileContent = fs.readFileSync(filePath, "utf-8");
+    const words = fileContent.split("\n");
+    count += words.length;
+    words.map((word) => {
+      map.set(word, (map.get(word) ?? 0) + 1);
+    });
+  });
+  return count;
+}
+
+// 1、统计得到每个词语出现的次数、总词语个数
+
+console.log("===> start at:" + new Date());
+const normalWords = new Map();
+const spamWords = new Map();
+const normalWordsCount = addMap("./vector/normal", normalWords);
+const spamWordsLength = addMap("./vector/spam", spamWords);
+console.log("===> end at:" + new Date());
+
+// 2、朴素贝叶斯算法——计算概率值
 ```
 
 ### 2.3.3 结果展示
