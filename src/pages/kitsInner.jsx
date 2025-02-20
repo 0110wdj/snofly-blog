@@ -1,7 +1,5 @@
 import { Select } from "antd";
 import { useState } from "react";
-import Craw from "./components/Craw";
-import Game2048 from "./components/Game2048/Game2048";
 import Hex from "./components/Hex";
 import HexString from "./components/HexString";
 import Iframe2048 from "./components/Iframe2048";
@@ -27,14 +25,6 @@ const options = [
     value: "hexstring",
     label: "ASCII 码",
   },
-  {
-    value: "craw",
-    label: "爬虫组件",
-  },
-  // {
-  //   value: 'game2048',
-  //   label: '2048游戏',
-  // },
   {
     value: "iframe2048",
     label: "2048游戏(iframe版)",
@@ -65,8 +55,6 @@ export default function Home() {
       {selected.includes("packjson") && <PackJson />}
       {selected.includes("hex") && <Hex />}
       {selected.includes("hexstring") && <HexString />}
-      {selected.includes("craw") && <Craw />}
-      {/* {selected.includes('game2048') && <Game2048 />} */}
       {selected.includes("iframe2048") && <Iframe2048 />}
       {selected.includes("javamap") && <Javamap />}
     </div>
