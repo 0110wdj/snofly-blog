@@ -137,14 +137,21 @@
       // 绘制标签
       skills.forEach((skill, index) => {
         const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
-        const labelRadius = radius + fontSize * 1.5;
+        const labelRadius = radius + fontSize * 2;  // 增加间距，原来是 fontSize
         const x = center.x + labelRadius * Math.cos(angle);
         const y = center.y + labelRadius * Math.sin(angle);
 
-        const textX = x;
-        const textY = y + (Math.abs(angle) < Math.PI / 2 ? fontSize / 2 : -fontSize / 2);
+        // 根据角度调整文本位置
+        let textY = y;
+        if (Math.abs(angle) < Math.PI / 2) {
+          // 上半部分
+          textY = y + fontSize / 3;
+        } else {
+          // 下半部分
+          textY = y + fontSize / 1.5;
+        }
 
-        ctx.fillText(skill.name, textX, textY);
+        ctx.fillText(skill.name, x, textY);
       });
     }
 
