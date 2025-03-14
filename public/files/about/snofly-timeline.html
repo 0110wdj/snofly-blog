@@ -1,8 +1,9 @@
 <div class="timeline-done">
   <div class="events">
     <div class="event life">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>1998</time>
@@ -12,8 +13,9 @@
       </div>
     </div>
     <div class="event life">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>2014.09</time>
@@ -23,8 +25,9 @@
       </div>
     </div>
     <div class="event programming">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>2017</time>
@@ -34,8 +37,9 @@
       </div>
     </div>
     <div class="event programming">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>2021.10</time>
@@ -45,8 +49,9 @@
       </div>
     </div>
     <div class="event life">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>2022.08</time>
@@ -56,8 +61,9 @@
       </div>
     </div>
     <div class="event programming">
-      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
-        <circle cx="6" cy="6" r="6"></circle>
+      <svg class="marker" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        <circle cx="8" cy="8" r="6" class="outer-circle"></circle>
+        <circle cx="8" cy="8" r="3" class="inner-circle"></circle>
       </svg>
       <div class="content">
         <time>2023.03</time>
@@ -70,111 +76,228 @@
 </div>
 
 <style>
+  :root {
+    --timeline-bg-light: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+    --timeline-bg-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    --timeline-line-light: #e2e8f0;
+    --timeline-line-dark: #334155;
+    --text-light: #334155;
+    --text-dark: #e2e8f0;
+    --marker-life-light: #22c55e;
+    --marker-life-dark: #4ade80;
+    --marker-programming-light: #a855f7;
+    --marker-programming-dark: #c084fc;
+    --content-bg-light: rgba(255, 255, 255, 0.8);
+    --content-bg-dark: rgba(30, 41, 59, 0.8);
+    --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-dark: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+
   body {
-    background: linear-gradient(to right, #63b3ff, transparent);
+    margin: 0;
+    background: var(--timeline-bg-light);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  body.dark {
+    background: var(--timeline-bg-dark);
+    color: var(--text-dark);
   }
 
   .events::before {
-    /* // We need some content for the element to show up. */
     content: "";
-    /* // Use absolute positioning to place the timeline at the very top. */
     position: absolute;
     top: 0;
-    /* // With a height and with the timeline will be a tall and thin box. */
     height: 100%;
-    width: 1px;
+    width: 2px;
+    background: var(--timeline-line-light);
+    transition: background-color 0.3s;
+    box-shadow: var(--shadow-light);
   }
 
-  .events {
-    position: relative;
-  }
-
-  /* // For the tutorial I use slightly different colors, */
-  /* // but you get the idea. */
-  .events::before {
-    background: white;
-  }
-
-  /* // Events use different classes to differentiate them. */
-  .event.life .marker {
-    fill: rgb(55, 230, 55);
-  }
-
-  .event.programming .marker {
-    fill: magenta;
-  }
-
-  .event.family .marker {
-    fill: red;
-  }
-
-  /* // Make the time stand out */
-  .content time {
-    font-family: concourse_4, Helvetica, sans-serif;
-    font-weight: bold;
-  }
-
-  /* // Just some extra spacing to make the timeline not merge */
-  /* // with the surrounding text. */
-  .events {
-    margin: 0.5em;
-  }
-
-  .event {
-    display: flex;
+  body.dark .events::before {
+    background: var(--timeline-line-dark);
+    box-shadow: var(--shadow-dark);
   }
 
   .event .marker {
     position: relative;
-    left: -6px;
+    left: -8px;
     top: 0px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+  }
+
+  .event .marker .outer-circle {
+    fill: none;
+    stroke: var(--marker-life-light);
+    stroke-width: 2;
+  }
+
+  .event .marker .inner-circle {
+    fill: var(--marker-life-light);
+  }
+
+  body.dark .event.life .marker .outer-circle {
+    stroke: var(--marker-life-dark);
+  }
+
+  body.dark .event.life .marker .inner-circle {
+    fill: var(--marker-life-dark);
+  }
+
+  .event.programming .marker .outer-circle {
+    stroke: var(--marker-programming-light);
+  }
+
+  .event.programming .marker .inner-circle {
+    fill: var(--marker-programming-light);
+  }
+
+  body.dark .event.programming .marker .outer-circle {
+    stroke: var(--marker-programming-dark);
+  }
+
+  body.dark .event.programming .marker .inner-circle {
+    fill: var(--marker-programming-dark);
   }
 
   .event {
-    align-items: baseline;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5em;
+  }
+
+  .content {
+    background: var(--content-bg-light);
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-light);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+
+  body.dark .content {
+    background: var(--content-bg-dark);
+    box-shadow: var(--shadow-dark);
+  }
+
+  .content time {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--marker-life-light);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  body.dark .content time {
+    color: var(--marker-life-dark);
+  }
+
+  .event.programming .content time {
+    color: var(--marker-programming-light);
+  }
+
+  body.dark .event.programming .content time {
+    color: var(--marker-programming-dark);
+  }
+
+  .content .text p {
+    margin: 0;
+    line-height: 1.5;
   }
 
   .events {
+    position: relative;
     display: flex;
-    /* // Lay out events column-wise instead of row-wise. */
     flex-direction: column;
-    /* // Set some spacing between elements. */
-    row-gap: 1em;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  .timeline-done * {
-    box-sizing: border-box;
-  }
-
-  @media (min-width: 700px) {
-    body {
-      background: linear-gradient(to left, transparent, #63b3ff, transparent);
-    }
-
+  @media (min-width: 768px) {
     .events::before {
       left: 50%;
     }
 
+    .event {
+      justify-content: flex-end;
+      width: 100%;
+    }
+
     .event .marker {
-      order: 1;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .event .content {
+      width: 45%;
       text-align: right;
-      padding-inline: 1em;
-      width: 50%;
     }
 
     .event:nth-child(2n) {
-      flex-direction: row-reverse;
+      justify-content: flex-start;
     }
 
     .event:nth-child(2n) .content {
       text-align: left;
     }
 
-    .event:nth-child(2n) .marker {
-      left: 6px;
+    .content {
+      transform: translateX(0);
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+
+    .event:hover .content {
+      transform: translateX(-10px);
+    }
+
+    .event:nth-child(2n):hover .content {
+      transform: translateX(10px);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .events::before {
+      left: 8px;
+    }
+
+    .event .marker {
+      left: 0;
+    }
+
+    .content {
+      margin-left: 2rem;
+      width: calc(100% - 3rem);
     }
   }
 </style>
+
+<script>
+  function updateTheme() {
+    const isDark = window.parent.document.documentElement.classList.contains('dark');
+    document.body.classList.toggle('dark', isDark);
+  }
+
+  // 初始化主题
+  updateTheme();
+
+  // 创建 MutationObserver 监听父页面的主题变化
+  const observer = new MutationObserver(() => {
+    updateTheme();
+  });
+
+  // 开始观察父页面的 html 元素
+  if (window.parent.document) {
+    observer.observe(window.parent.document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+</script>
