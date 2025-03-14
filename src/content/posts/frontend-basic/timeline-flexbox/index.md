@@ -252,9 +252,9 @@ draft: false
 }
 ```
 
-Even though I won’t include the media query in the following code snippets the media query should wrap them all.
+Even though I won't include the media query in the following code snippets the media query should wrap them all.
 
-下文我就不再重复写媒体查询的代码片段了，但是你应该知道，这些代码是被包媒体查询结构代码里面的。
+下文我就不再重复写媒体查询的代码片段了，但是你应该知道，这些代码是被包含在媒体查询结构代码里面的。
 
 ### 事件移动靠左
 
@@ -281,7 +281,7 @@ Even though I won’t include the media query in the following code snippets the
 
 > (译者注：手动拉伸一下，对比效果。)
 
-Now, let’s move the marker to the timeline. First lets move the marker to be after the content in the layout ordering:
+Now, let's move the marker to the timeline. First lets move the marker to be after the content in the layout ordering:
 
 现在，让我们把圈圈移动到时间轴上。
 
