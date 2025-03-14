@@ -76,7 +76,8 @@
     ];
 
     function drawRadar() {
-      const isDark = document.documentElement.classList.contains('dark');
+      // 获取当前主题状态
+      const isDark = window.parent.document.documentElement.classList.contains('dark');
       const width = canvas.width / window.devicePixelRatio;
       const height = canvas.height / window.devicePixelRatio;
       const center = { x: width / 2, y: height / 2 };
@@ -84,6 +85,12 @@
 
       // 清空画布
       ctx.clearRect(0, 0, width, height);
+
+      // 根据主题设置颜色
+      const textColor = isDark ? '#FFFFFF' : '#1F2937';  // 明确设置亮色主题为深色文本
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+      const areaFillColor = isDark ? 'rgba(96, 165, 250, 0.3)' : 'rgba(59, 130, 246, 0.15)';
+      const areaStrokeColor = isDark ? 'rgba(96, 165, 250, 0.9)' : 'rgba(59, 130, 246, 0.6)';
 
       // 绘制背景网格
       const levelCount = 5;
@@ -97,7 +104,7 @@
           index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         });
         ctx.closePath();
-        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+        ctx.strokeStyle = gridColor;
         ctx.stroke();
       }
 
@@ -110,9 +117,9 @@
         index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       });
       ctx.closePath();
-      ctx.fillStyle = isDark ? 'rgba(96, 165, 250, 0.3)' : 'rgba(59, 130, 246, 0.15)';
+      ctx.fillStyle = areaFillColor;
       ctx.fill();
-      ctx.strokeStyle = isDark ? 'rgba(96, 165, 250, 0.9)' : 'rgba(59, 130, 246, 0.6)';
+      ctx.strokeStyle = areaStrokeColor;
       ctx.stroke();
 
       // 绘制轴线
@@ -124,7 +131,7 @@
           center.x + radius * Math.cos(angle),
           center.y + radius * Math.sin(angle)
         );
-        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+        ctx.strokeStyle = gridColor;
         ctx.stroke();
       });
 
@@ -132,7 +139,7 @@
       const fontSize = Math.max(12, Math.min(16, width / 30));
       ctx.font = `${fontSize}px system-ui, sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillStyle = isDark ? '#ffffff' : '#374151';
+      ctx.fillStyle = textColor;  // 使用主题对应的文本颜色
 
       // 绘制标签
       skills.forEach((skill, index) => {
@@ -174,20 +181,23 @@
     // 监听窗口大小变化
     window.addEventListener('resize', debounce(resizeCanvas, 250));
 
-    // 监听主题变化
+    // 修改观察器，使用父窗口的主题变化
     const observer = new MutationObserver(() => {
       drawRadar();
     });
 
-    observer.observe(document.documentElement, {
+    observer.observe(window.parent.document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
   });
 
-  // 在 script 末尾添加立即执行的主题初始化
+  // 修改主题初始化函数
   (function initTheme() {
+    // 从父窗口获取主题状态
     const isDark = window.parent.document.documentElement.classList.contains('dark');
-    document.body.classList.toggle('dark', isDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
   })();
 </script>
