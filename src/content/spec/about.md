@@ -1,8 +1,6 @@
 ## 简介
 
-屈身守分，以待天时；恒念志远，跬步千里。
-
-![me](./me.jpeg)
+我是一名前端开发工程师，热爱编程，喜欢探索新技术。我喜欢挑战自我，不断学习，不断进步。我相信，只要你有足够的热情和毅力，你就可以成为一个优秀的程序员。
 
 <iframe
   width="100%"
@@ -24,38 +22,16 @@
 - 科研：逻辑推导、代码优雅
 - 运动：慢跑、骑行
 
-## 专业技能
+## 技能雷达
 
-- 基础技能
-
-  - <img src="https://img.shields.io/badge/JavaScript-Senior-red" alt="JavaScript" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/css-Senior-red" alt="css" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/git-Senior-red" alt="git"          style="display:inline-block;height:30px;" />
-
-  - <img src="https://img.shields.io/badge/html-Medior-yellow" alt="html" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/react-Medior-yellow" alt="React" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/antd-Medior-yellow" alt="antd" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/ts/jsdoc-Medior-yellow" alt="ts/jsdoc" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/NodeJS-Medior-yellow" alt="NodeJS" style="display:inline-block;height:30px;" />
-
-  - <img src="https://img.shields.io/badge/echarts-Junior-blue" alt="echarts" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/Electron-Junior-blue" alt="Electron" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/npm-Junior-blue" alt="npm"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/Java-Junior-blue" alt="Java"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/MySQL-Junior-blue" alt="MySQL"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/Pyhton-Junior-blue" alt="Pyhton"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/C/C++-Junior-blue" alt="C/C++"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/go-Junior-blue" alt="go"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/shell-Junior-blue" alt="shell"          style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/algorithm-Junior-blue" alt="algorithm" style="display:inline-block;height:30px;" />
-    <img src="https://img.shields.io/badge/UI-Junior-blue" alt="UI"          style="display:inline-block;height:30px;" />
-
-- 进阶技能
-
-  - <img src="https://img.shields.io/badge/webpack-Medior-yellow" alt="webpack" style="display:inline-block;height:30px;" />
-
-- 走过的路
-  - [主线](https://github.com/0110wdj/Stark-Mansion-Lab-One?tab=readme-ov-file#main-roadmap)
+<iframe
+  width="100%"
+  height="500px"
+  src="/files/about/skills.html"
+  title="skills-radar"
+  style="border: none; overflow: hidden; background: transparent;"
+  loading="lazy"
+/>
 
 ## MBTI
 

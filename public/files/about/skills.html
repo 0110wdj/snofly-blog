@@ -1,0 +1,186 @@
+<div class="skill-radar-container">
+  <div class="skill-radar">
+    <canvas id="skillRadar"></canvas>
+  </div>
+</div>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent !important; /* 强制背景透明 */
+  }
+
+  .skill-radar-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skill-radar {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1;
+    padding: 1rem;
+  }
+
+  .skill-radar canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('skillRadar');
+    const ctx = canvas.getContext('2d');
+
+    // 设置canvas的实际尺寸
+    function resizeCanvas() {
+      const container = canvas.parentElement;
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+
+      // 设置canvas的显示尺寸
+      canvas.style.width = containerWidth + 'px';
+      canvas.style.height = containerHeight + 'px';
+
+      // 设置canvas的实际尺寸（考虑设备像素比）
+      canvas.width = containerWidth * window.devicePixelRatio;
+      canvas.height = containerHeight * window.devicePixelRatio;
+
+      // 调整绘图上下文的缩放
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      // 重新绘制
+      drawRadar();
+    }
+
+    // 定义能力维度和分数
+    const skills = [
+      { name: '工程化能力', score: 0.85 },
+      { name: '技术广度', score: 0.78 },
+      { name: '编码能力', score: 0.88 },
+      { name: '架构设计', score: 0.75 },
+      { name: '问题解决', score: 0.82 },
+      { name: '团队协作', score: 0.85 }
+    ];
+
+    function drawRadar() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const width = canvas.width / window.devicePixelRatio;
+      const height = canvas.height / window.devicePixelRatio;
+      const center = { x: width / 2, y: height / 2 };
+      const radius = Math.min(width, height) * 0.35;
+
+      // 清空画布
+      ctx.clearRect(0, 0, width, height);
+
+      // 绘制背景网格
+      const levelCount = 5;
+      for (let i = levelCount; i > 0; i--) {
+        const ratio = i / levelCount;
+        ctx.beginPath();
+        skills.forEach((_, index) => {
+          const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
+          const x = center.x + radius * ratio * Math.cos(angle);
+          const y = center.y + radius * ratio * Math.sin(angle);
+          index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.closePath();
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+        ctx.stroke();
+      }
+
+      // 绘制数据区域
+      ctx.beginPath();
+      skills.forEach((skill, index) => {
+        const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
+        const x = center.x + radius * skill.score * Math.cos(angle);
+        const y = center.y + radius * skill.score * Math.sin(angle);
+        index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = isDark ? 'rgba(96, 165, 250, 0.3)' : 'rgba(59, 130, 246, 0.15)';
+      ctx.fill();
+      ctx.strokeStyle = isDark ? 'rgba(96, 165, 250, 0.9)' : 'rgba(59, 130, 246, 0.6)';
+      ctx.stroke();
+
+      // 绘制轴线
+      skills.forEach((_, index) => {
+        const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(
+          center.x + radius * Math.cos(angle),
+          center.y + radius * Math.sin(angle)
+        );
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+        ctx.stroke();
+      });
+
+      // 计算自适应的字体大小
+      const fontSize = Math.max(12, Math.min(16, width / 30));
+      ctx.font = `${fontSize}px system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillStyle = isDark ? '#ffffff' : '#374151';
+
+      // 绘制标签
+      skills.forEach((skill, index) => {
+        const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
+        const labelRadius = radius + fontSize * 1.5;
+        const x = center.x + labelRadius * Math.cos(angle);
+        const y = center.y + labelRadius * Math.sin(angle);
+
+        const textX = x;
+        const textY = y + (Math.abs(angle) < Math.PI / 2 ? fontSize / 2 : -fontSize / 2);
+
+        ctx.fillText(skill.name, textX, textY);
+      });
+    }
+
+    // 初始化
+    resizeCanvas();
+
+    // 添加防抖函数
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', debounce(resizeCanvas, 250));
+
+    // 监听主题变化
+    const observer = new MutationObserver(() => {
+      drawRadar();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  });
+
+  // 在 script 末尾添加立即执行的主题初始化
+  (function initTheme() {
+    const isDark = window.parent.document.documentElement.classList.contains('dark');
+    document.body.classList.toggle('dark', isDark);
+  })();
+</script>
