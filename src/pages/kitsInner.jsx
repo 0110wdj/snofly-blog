@@ -13,6 +13,7 @@ const options = [
   {
     value: "protobuf",
     label: "protobuf 解码",
+    default: true,
   },
   {
     value: "packjson",

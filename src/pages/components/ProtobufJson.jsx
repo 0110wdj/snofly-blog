@@ -11,7 +11,7 @@ const ProtobufJson = () => {
 
   return (
     <>
-      <h3>Base64-Protobuf-Json</h3>
+      <h3>protobuf-json</h3>
       <div class='flex flex-row'>
         <Input.TextArea
           value={base64}
