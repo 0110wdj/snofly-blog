@@ -39,11 +39,11 @@ export const navBarConfig: NavBarConfig = {
     //   url: 'http://www.snofly.cn:8081/',
     //   external: true,
     // },
-    {
-      name: 'github',
-      url: 'https://github.com/0110wdj',
-      external: true,
-    },
+    // {
+    //   name: 'github',
+    //   url: 'https://github.com/0110wdj',
+    //   external: true,
+    // },
   ],
 }
 
@@ -56,6 +56,11 @@ export const profileConfig: ProfileConfig = {
       name: 'GitHub',
       icon: 'fa6-brands:github',
       url: 'https://github.com/0110wdj',
+    },
+    {
+      name: 'npm',
+      icon: 'simple-icons:npm',
+      url: 'https://www.npmjs.com/~snofly',
     },
     {
       name: 'leetcode',
