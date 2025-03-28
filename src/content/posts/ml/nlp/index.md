@@ -2,7 +2,7 @@
 title: 机器学习入门实践
 published: 2025-02-19
 description: ""
-image: ""
+image: "./background.png"
 tags: ["NLP"]
 category: "ML"
 draft: false
