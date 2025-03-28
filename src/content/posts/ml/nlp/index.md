@@ -111,7 +111,7 @@ normal 表示其内都是正常邮件（个人笔记、好友消息等），spam
 <details>
   <summary>data/normal 文件 274.txt</summary>
 
-```txt
+```
 Return-Path: <chi@rbl.ccert.edu.cn>
 Received: from rbl.ccert.edu.cn (rbl.ccert.edu.cn [202.112.57.71])
 	by sea.net.edu.cn (8.12.11/8.12.11) with ESMTP id i9G08rJt015597
