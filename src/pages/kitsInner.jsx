@@ -2,6 +2,7 @@ import { Select } from "antd";
 import { ConfigProvider } from 'antd';
 import { theme } from 'antd';
 import { useEffect, useState } from "react";
+import Gomoku from "./components/Gomoku/Gomoku";
 import Hex from "./components/Hex";
 import HexString from "./components/HexString";
 import Iframe2048 from "./components/Iframe2048";
@@ -35,6 +36,10 @@ const options = [
   {
     value: "javamap",
     label: "狂神说 Java",
+  },
+  {
+    value: "gomoku",
+    label: "五子棋小游戏",
   },
 ];
 
@@ -107,6 +112,7 @@ export default function Home() {
           {selected.includes("hex") && <Hex />}
           {selected.includes("hexstring") && <HexString />}
           {selected.includes("iframe2048") && <Iframe2048 />}
+          {selected.includes("gomoku") && <Gomoku />}
           {selected.includes("javamap") && <Javamap />}
         </div>
       </div>
