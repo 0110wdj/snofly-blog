@@ -3,8 +3,8 @@
   "type": "module",
   "version": "2.1.1",
   "scripts": {
-    "dev": "astro dev",
     "start": "astro dev",
+    "prestart": "node scripts/fetch-readme.cjs",
     "prebuild": "node scripts/fetch-readme.cjs",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",

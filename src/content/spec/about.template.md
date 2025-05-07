@@ -22,17 +22,6 @@
 - 科研：逻辑推导、代码优雅
 - 运动：慢跑、骑行
 
-## 技能雷达
-
-<iframe
-  width="100%"
-  height="500px"
-  src="/files/about/skills.html"
-  title="skills-radar"
-  style="border: none; overflow: hidden; background: transparent;"
-  loading="lazy"
-/>
-
 <br/ >
 
 ## MBTI
@@ -42,5 +31,4 @@
 - [INTJ](https://www.16personalities.com/ch/intj-%E4%BA%BA%E6%A0%BC) 建筑师 2024
 
 # 事业主线
-
 <!-- INJECT:README -->
