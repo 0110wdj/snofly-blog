@@ -227,7 +227,7 @@ react 的设计原理，就是指它在运行时是怎么发挥作用的，主�
 
 这是一个多模块协同的工作流程，数据在各个模块之间传递、共享。
 
-## 1.2 react 重要模块的设计
+## 1.2 初始化时期简介
 
 js 中，一个工具函数被加载到调用栈中执行，它通常会做两件事：
 
@@ -250,9 +250,7 @@ js 中，一个工具函数被加载到调用栈中执行，它通常会做两�
 
 在这之前，先简要介绍一些初始化过程中建立的一些变量，因为更新时期会用到它们。
 
-### 1.2.1 初始化的变量
-
-#### 1.2.2.1 状态注册
+### 1.2.1 状态注册
 
 初始化的过程中，这句代码做了什么：
 
@@ -291,18 +289,32 @@ function dispatchSetState(action) {
 }
 ```
 
-其中，由于 Hook 链表的顺序是需要固定的，所以在函数组件中，不能使用这样的代码：
+上面提到的 fiber 是一个树结构的对象，这里面包含了很多属性，其中就有一个 Hook 链表。
+
+fiber 在形式上，就是 DOM 节点在内存中的表示，也称为 Fiber Node，它和真实的 DOM 节点一一对应。
+
+### 1.2.2 引申的问题：为什么不能在 if 中使用 hook
+
+在函数组件中，不能使用这样的代码：
 
 ```js
 const [count, setCount] = useState(0);
 if (condition) {
-  const [count, setCount] = useState(0);
+  const [num, setNum] = useState(0);
 }
 ```
 
-这样的代码会导致 Hook 链表的顺序不一致，从而导致状态管理的错误。
+这样的代码会导致 Hook 链表的顺序不一致，从而导致状态管理的错误，所以 react 会直接报错。
 
-### 1.2.3 触发更新
+更深层的原因是：
+
+- useState 本身没有“名字”概念，React 不知道你用的是什么变量名；
+- 函数组件每次执行时会重新声明这些变量，变量名只是 JS 层的临时绑定；
+- 链表和顺序，可以准确找到对应的状态；
+
+## 1.3 更新时期的工作流程
+
+### 1.3.1 触发更新
 
 用户点击按钮，触发事件。我们来看这个过程：
 
@@ -342,7 +354,9 @@ Update 对象的结构大概是这样的：
 }
 ```
 
-这里面的 action 就是用于计算新的 state 的函数，如果存在多个更新，那么可能会进行合并。
+这里面的 action 就是用于计算新的 state 的函数。
+
+调度时，如果存在多个更新，那么可能会进行合并。
 
 总之，如果有这样的操作：
 
@@ -351,7 +365,7 @@ setCount(1);
 setCount((prev) => prev + 2);
 ```
 
-那么产生这样的更新队列：
+那么会产生这样的更新队列：
 
 ```js
 Update1: {
@@ -367,9 +381,58 @@ Update2: {
 }
 ```
 
+这个更新队列会被放在这个地方：
+
+当前函数组件所对应的 fiber 节点的 memoizedState 属性，所指向的 hook 链表中的第一个 hook 节点的 queue 属性中的 pending 数组中。
+
+举例说明：
+
+如果有这样的代码：
+
+```js
+function App() {
+  const [count, setCount] = useState(0); // Hook 1
+  const [name, setName] = useState("React"); // Hook 2
+
+  return (
+    <button onClick={() => setName("Vue")}>
+      {count} - {name}
+    </button>
+  );
+}
+```
+
+在执行到两个 hook 声明时，fiber 中会产生这样的变化：
+
+```js
+fiber.memoizedState → Hook(count) → Hook(name)
+```
+
+初始化了 Hook 1 和 Hook 2，然后执行了 onClick 函数，产生了更新任务：
+
+```js
+fiber.memoizedState → Hook(count=0, queue=null)
+                    → Hook(name="React", queue.pending=[update:"Vue"])
+```
+
+如果有新的 UpDate 对象产生，它会被插入到 queue.pending 中。
+
+比如：
+
+```js
+fiber.memoizedState → Hook(count=0, queue=null)
+                    → Hook(name="React",
+                        queue.pending=[
+                          update:"Vue"，
+                          update:"js",
+                          update:(pre)=>{pre+"something"}
+                          ]
+                        )
+```
+
 最后，把更新任务交给调度器，等待执行进一步处理。
 
-### 1.2.4 调度器
+### 1.3.2 调度器
 
 调度器的核心目标是：按照优先级合理安排组件重新渲染的时间和方式。
 
@@ -380,26 +443,23 @@ Update2: {
 - UpdateQueue
 - 当前调度状态
 - 当前时间戳
+- 等等
 
 它没有直接的输出，而是产生一些副作用：
 
-- 安排一次调和任务（reconciliation）
-- 将更新任务放入任务队列
-- 触发浏览器调度
-- 可能打断已有任务
-- 最终执行“渲染”或“提交”任务
+- 标记组件为「有更新」
+- 计算优先级，注册调度任务
+- 启动渲染阶段
 
-这里不理解没关系，我们可以先跳过。
-
-回到上面的例子，调度中心收到了更新队列，其中包含了两个 Update 对象：
+回到上面的一个例子，调度中心收到了更新队列，其中包含了两个 Update 对象：
 
 ```
 UpdateQueue: Update1 -> Update2
 ```
 
-然后调度中心开始工作了。
+下面看看调度器具体的工作。
 
-#### 1.2.4.1 将组件标记为待更新状态
+#### 1.3.2.1 将组件标记为待更新状态
 
 我们之前提到了，我们在内存中有两个对应于真实 dom 的虚拟 dom。
 
@@ -414,20 +474,16 @@ UpdateQueue: Update1 -> Update2
 进一步，我们可以区分这两个对象：称一个为 current node，另一个为 workInProgress node。
 
 current node 对应于当前的真实 dom ，它作用有两个：
-1、基于他生成 workInProgress node；
-2、和真实 dom 比较。
+1、渲染阶段，基于它生成 workInProgress node；
+2、和真实 dom 作 diff 计算。
 
 workInProgress node 是一个对象，react 将下一帧需要更新的内容，首先应用到这个对象上。
 
 需要实际应用更新的时候，切换一下这两个 node 即可。
 
-回到举例中，我们的调度器收到了更新队列，其中包含了两个 Update 对象。
-
-这个更新队列会被插入到 updateQueue.shared.pending 中，这是 current node 中的一个属性，等待进一步处理。
-
 基于 Update 对象，调度器能够知道并标记需要更新的组件，然后会向上级组件递归传递，直到 root 节点。
 
-#### 1.2.4.2 计算优先级（Lane 模型）
+#### 1.3.2.2 计算优先级（Lane 模型）
 
 我们知道，浏览器进程中的 js 线程和 UI 线程是互斥的。
 
@@ -456,7 +512,7 @@ const DefaultLane = 0b0000000000000000000000000000100; // 默认优先级
 
 回到举例中，调度器标记了更新状态后，还会进一步计算和标记优先级状态。
 
-#### 1.2.4.3 合并更新
+#### 1.3.2.3 合并更新
 
 如果存在这样的代码：
 
@@ -476,44 +532,81 @@ setCount(3);
 
 简单来说，调度器更新了 Fiber node，准备好了全部信息之后，等待下一阶段的执行。
 
-下一阶段，在 react 中称为 render 阶段，中文翻译为渲染阶段，这里的渲染和浏览器中的 cssom 和 dom 渲染是两个概念。
+下一阶段，在 react 中称为 render 阶段，中文翻译为渲染阶段，这里的渲染和浏览器中基于 cssom 和 dom 生成渲染树的过程类似。
 
 注意：调度器在当前调度工作完成后，可能还有部分任务没有处理。这些任务，将会等待下一次调度的处理。
 
-### 1.2.5 render 阶段
+### 1.3.3 render 阶段
 
-render 阶段更具 current node 计算 workInProgress node。
+renderRoot 是一个纯计算过程，会：
 
-<!-- #### 第四步：应用更新
+- 根据旧的 fiber tree；
+- 按顺序遍历每个 Hook
+- 应用 queue.pending 中的 update，生成新的状态
+- 得出新的虚拟 DOM fiber 树（workInProgress node）
+
+至此，调度器的任务完成了，后续就是渲染中心的事。
 
 注意：调度器代码执行期间，浏览器页面并不会发生变化，此时的操作都是内存中对象的修改。
 
-调度器得到了要更新的内容之后，就可以应用到 current node 上。
+### 1.3.4 commit 阶段
 
-它会修改 current node 上某个子节点的属性。
+commit 阶段的整体目标是：
 
-比如这样的的代码：
+- 将渲染阶段生成的 fiber 树（workInProgress）中的变更，真正「提交」到浏览器的真实 DOM 中。
 
-```
-// ... count 初始值是 1
-<div id="count">count<div>
-// ...
-setCount(3);
-// ...
-```
+也就是说：
 
-在 workInProgress node 上，会存在一个 div 节点，这个节点的属性会被修改。
+- 渲染阶段只是「算出」要干什么
+- 提交阶段才「真正执行」这些事情：修改 DOM、触发副作用、调用生命周期
 
-这里之所以能够找到这个节点，是因为 Update 中存在了相关标记。
+此时，内存中存在两个 fiber 树，我们之前提到过，一个是 current node，一个是 workInProgress node。
 
-这一部分完成后，workInProgress node 就已经完成了修改。
+显然，current node 中的 dom 结构和真实 dom 一致，而 workInProgress node 中的 dom 结构就是下一帧会真实 DOM。
 
-此时，真实 dom 的 div 节点还是 1，另一个虚拟 dom current node 中的 div 节点也是 1。
+commit 阶段会把 workInProgress node 和 current node 做 diff 计算，得到变化的部分。
+然后，应用到真实 DOM 中，完成更新。
 
-#### 第五步：切换 Fiber node
+之后会根据变化的部分，执行生命周期函数和副作用函数。
 
-在这一步，调度器会切换 Fiber node 。
+#### diff 算法
 
-这一步骤最关键的就是，将 workInProgress node 赋值给 current node 。
+注意之前提到的标记，diff 时能够更具变化标记，支剪大量遍历工作。
 
-然后 current node 就会和真实 dom 产生差异，然后就会触发 react 下一阶段的执行。 -->
+diff 算法会检查逐层变了 node，如果没有变化标记，就不再处理。
+
+如果需要修改，则会确定修改的方式：新增、删除、修改。
+
+在这个过程中，react 会根据 key 来选择复用某些节点，减少不必要的操作。
+
+这里有个常见的问题：为什么不能推荐使用数组的 index 来做 key ?
+
+答案是：React 在「列表渲染」中使用 key 来识别每个列表项，区分哪些元素被插入、删除、移动或复用。当数组发生变化（特别是中间插入/删除）时，会导致「错误的复用」，造成页面状态错乱！
+
+### 1.3.5 小结
+
+commit 之后，页面中的真实 DOM 就会被更新。
+
+这一帧的更新就完成了，之后会等待下一次更新。
+
+值得一提的是：虚拟 DOM 的设计，可以支持跨端。
+
+在 commit 阶段之前的工作，都是在内存中进行的，不涉及具体的环境 —— pc 浏览器或手机屏幕。
+
+于是，利用不同的 commit 工具（react native），既可以把 react 代码应用到其他终端上。
+
+## 1.4 总结
+
+react 设计原理的核心，是调度器、渲染中心和提交中心这三个核心模块的协同工作。
+
+调度器负责管理更新任务，渲染中心负责计算更新，提交中心负责更新 DOM。
+
+在这个过程中，react 会根据优先级，合并更新任务，提高更新效率。
+
+这就是 react 的设计原理，它是一个复杂的系统，需要不断地学习和探索。
+
+## 1.5 参考资料
+
+- 《react 设计原理(卡颂)》
+- React 官网
+- chatGpt
