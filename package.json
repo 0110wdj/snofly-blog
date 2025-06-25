@@ -64,6 +64,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@types/markdown-it": "^14.0.0",
     "@types/sanitize-html": "^2.11.0",
+    "rc-virtual-list": "^3.19.1",
     "stylus": "^0.63.0"
   }
 }
