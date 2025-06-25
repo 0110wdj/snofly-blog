@@ -1,11 +1,11 @@
 ---
-title: 由虚拟列表到引发的思考
-published: 2025-06-16
+title: 由虚拟列表引发的思考（上）
+published: 2025-06-25
 description: ""
 image: ""
 tags: ["js"]
 category: "前端入门"
-draft: true
+draft: false
 ---
 
 # 前言
@@ -568,10 +568,6 @@ function collectHeight() {
 如果你的目标是学习虚拟列表，那么到此就可以结束了。
 
 后文会介绍浏览器的渲染机制，然后进一步讨论虚拟列表带来的收益的量化测评。
-
-# 渲染过程
-
-# 性能测试
 
 # 总结
 
