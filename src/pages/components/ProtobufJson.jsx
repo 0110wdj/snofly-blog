@@ -26,6 +26,7 @@ const ProtobufJson = () => {
             }}
             onSelect={v => setProtobufType(v)}
             value={protobufType}
+            getPopupContainer={(triggerNode) => triggerNode.parentNode}
             options={[
               'Chart',
               'Charts',

@@ -32,7 +32,7 @@ export const navBarConfig: NavBarConfig = {
     LinkPreset.Home,
     LinkPreset.Archive,
     LinkPreset.About,
-    // LinkPreset.Talk,
+    LinkPreset.Talk,
     LinkPreset.Kits,
     // {
     //   name: '资源',

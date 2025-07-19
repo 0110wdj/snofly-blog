@@ -1,7 +1,8 @@
 {
   "name": "snofly",
   "type": "module",
-  "version": "2.1.1",
+  "version": "2.2.0",
+  "packageManager": "pnpm@9.0.6",
   "scripts": {
     "start": "astro dev",
     "prestart": "node scripts/fetch-readme.cjs",

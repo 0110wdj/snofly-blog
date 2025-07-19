@@ -43,7 +43,7 @@ const options = [
   },
 ];
 
-export default function Home() {
+export default function KitsInner() {
   const [selected, setSelected] = useState(
     options.filter((i) => i.default).map((i) => i.value)
   );
@@ -72,7 +72,13 @@ export default function Home() {
       attributeFilter: ['class']
     });
 
-    return () => observer.disconnect();
+    // 清理函数
+    return () => {
+      observer.disconnect();
+      // 确保组件卸载时清理所有状态
+      setSelected(options.filter((i) => i.default).map((i) => i.value));
+      setIsDarkMode(false);
+    };
   }, []);
 
   return (
@@ -105,6 +111,7 @@ export default function Home() {
           options={options}
           onChange={(v) => setSelected(v)}
           className="mb-4"
+          getPopupContainer={(triggerNode) => triggerNode.parentNode}
         />
         <div className="w-full space-y-4">
           {selected.includes("protobuf") && <ProtobufJson />}
