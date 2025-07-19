@@ -20,8 +20,8 @@ const buildBaseURL = () => {
     return `${protocol}://${baseURL}`
   }
 
-  // 生产环境：使用 localhost
-  return 'http://localhost:9527'
+  // 生产环境：使用相对路径，通过 nginx 代理到后端
+  return ''
 }
 
 // 根据环境设置 API 配置
@@ -41,9 +41,9 @@ export const apiConfig = {
   },
 }
 
-// 开发环境配置检查
+// 环境配置检查
 if (isDev) {
-  console.log('🔧 API 配置信息:')
+  console.log('🔧 开发环境 API 配置信息:')
   console.log(`   - 基础地址: ${apiConfig.baseURL}`)
   console.log(`   - 超时时间: ${apiConfig.timeout}ms`)
   console.log(`   - 重试次数: ${apiConfig.retryCount}`)
@@ -58,4 +58,10 @@ if (isDev) {
       '💡 建议在 .env 文件中配置 VITE_API_BASE_URL 或 VITE_API_FULL_URL',
     )
   }
+} else {
+  console.log('🚀 生产环境 API 配置信息:')
+  console.log('   - 基础地址:', apiConfig.baseURL || '相对路径')
+  console.log('   - 通过 nginx 代理到后端')
+  console.log('   - 超时时间:', apiConfig.timeout, 'ms')
+  console.log('   - 重试次数:', apiConfig.retryCount)
 }
