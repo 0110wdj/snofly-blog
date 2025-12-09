@@ -26,6 +26,8 @@
 
 - [INTJ](https://www.16personalities.com/ch/intj-%E4%BA%BA%E6%A0%BC) 建筑师 2024
 
+- [INTJ](https://www.16personalities.com/ch/entj-%E4%BA%BA%E6%A0%BC) 指挥官 2025
+
 # 学习经历
 
 <!-- INJECT:README -->
