@@ -7,22 +7,12 @@ import Hex from "./components/Hex";
 import HexString from "./components/HexString";
 import Iframe2048 from "./components/Iframe2048";
 import Javamap from "./components/Javamap";
-import PackJson from "./components/PackJson";
-import ProtobufJson from "./components/ProtobufJson";
 
 const options = [
   {
-    value: "protobuf",
-    label: "protobuf 解码",
-  },
-  {
-    value: "packjson",
-    label: "packjson 解码与编码",
-    default: true,
-  },
-  {
     value: "hex",
     label: "进制转换",
+    default: true,
   },
   {
     value: "hexstring",
@@ -115,8 +105,6 @@ export default function KitsInner() {
           getPopupContainer={(triggerNode) => triggerNode.parentNode}
         />
         <div className="w-full space-y-4">
-          {selected.includes("protobuf") && <ProtobufJson />}
-          {selected.includes("packjson") && <PackJson />}
           {selected.includes("hex") && <Hex />}
           {selected.includes("hexstring") && <HexString />}
           {selected.includes("iframe2048") && <Iframe2048 />}

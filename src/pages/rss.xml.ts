@@ -1,5 +1,6 @@
 import rss from '@astrojs/rss';
 import {siteConfig} from '@/config';
+import { url } from '@utils/url-utils';
 import { getCollection } from 'astro:content';
 import sanitizeHtml from 'sanitize-html';
 import MarkdownIt from 'markdown-it';
@@ -15,7 +16,7 @@ export async function GET(context: any) {
         title: post.data.title,
         pubDate: post.data.published,
         description: post.data.description,
-        link: `/posts/${post.slug}/`,
+        link: new URL(url(`/posts/${post.slug}/`), context.site).href,
         content: sanitizeHtml(parser.render(post.body), {
           allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
         }),

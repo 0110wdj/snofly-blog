@@ -95,7 +95,7 @@ draft: false
 
 投递的岗位都是 北京 React 前端开发 1~3 年 \*\* k。
 
-<a href="/files/2023.docx" target="_blank">下载 2023 面试题目</a>
+<a href="/snofly-blog/files/2023.docx" target="_blank">下载 2023 面试题目</a>
 
 关于题目的答案，这里推荐两个网站：
 

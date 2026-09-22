@@ -25,8 +25,8 @@ const oklchToHex = str => {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "http://www.snofly.cn/",
-  base: "/",
+  site: "https://0110wdj.github.io",
+  base: "/snofly-blog/",
   trailingSlash: "always",
   integrations: [tailwind(), swup({
     theme: false,

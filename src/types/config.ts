@@ -26,7 +26,6 @@ export enum LinkPreset {
   Home = 0,
   Archive = 1,
   About = 2,
-  Talk = 3,
   Kits = 4,
 }
 

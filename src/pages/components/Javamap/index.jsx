@@ -2,7 +2,7 @@ const Javamap = () => {
   return (
     <div style={{ marginTop: "20px" }}>
       <iframe
-        src="/files/javamap/javamap.html"
+        src={`${import.meta.env.BASE_URL}files/javamap/javamap.html`}
         title="戴 java cb"
         style={{
           width: "800px",

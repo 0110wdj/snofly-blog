@@ -21,7 +21,7 @@ interface Props {
 
 let { title, banner, description } = Astro.props;
 
-const isHomePage = pathsEqual(Astro.url.pathname, '/');
+const isHomePage = pathsEqual(Astro.url.pathname, import.meta.env.BASE_URL);
 
 const testPathName = Astro.url.pathname;
 
@@ -82,7 +82,7 @@ const siteLang = siteConfig.lang.replace('_', '-')
 		<meta name="description" content={description || pageTitle}>
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<link rel="shortcut icon" href="/favicon/favicon.ico" />
+		<link rel="shortcut icon" href={url('/favicon/favicon.ico')} />
 		<!-- {favicons.map(favicon => (
 			<link rel="icon"
 				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
@@ -113,7 +113,7 @@ const siteLang = siteConfig.lang.replace('_', '-')
 
 		<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
 
-		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
+		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={new URL(url('rss.xml'), Astro.site)}/>
 
 		<style define:vars={{ configHue }}></style>  <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 

@@ -29,7 +29,7 @@ draft: false
 <iframe 
   width="100%"
   height="180px"
-  src="/files/timeline/timeline-codepart.html"
+  src="/snofly-blog/files/timeline/timeline-codepart.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -135,7 +135,7 @@ draft: false
 <iframe
   width="100%"
   height="270px"
-  src="/files/timeline/timeline-linepart.html"
+  src="/snofly-blog/files/timeline/timeline-linepart.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -152,7 +152,7 @@ draft: false
 <iframe
   width="100%"
   height="240px"
-  src="/files/timeline/timeline-alignment-1.html"
+  src="/snofly-blog/files/timeline/timeline-alignment-1.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -181,7 +181,7 @@ draft: false
 <iframe
   width="100%"
   height="240px"
-  src="/files/timeline/timeline-alignment-2.html"
+  src="/snofly-blog/files/timeline/timeline-alignment-2.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -205,7 +205,7 @@ draft: false
 <iframe
   width="100%"
   height="240px"
-  src="/files/timeline/timeline-alignment-3.html"
+  src="/snofly-blog/files/timeline/timeline-alignment-3.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -234,7 +234,7 @@ draft: false
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-verticalspacing-1.html"
+  src="/snofly-blog/files/timeline/timeline-verticalspacing-1.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -271,7 +271,7 @@ Even though I won't include the media query in the following code snippets the m
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-making-responsive-1.html"
+  src="/snofly-blog/files/timeline/timeline-making-responsive-1.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -296,7 +296,7 @@ Now, let's move the marker to the timeline. First lets move the marker to be aft
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-making-responsive-2.html"
+  src="/snofly-blog/files/timeline/timeline-making-responsive-2.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -313,7 +313,7 @@ Now, let's move the marker to the timeline. First lets move the marker to be aft
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-making-responsive-3.html"
+  src="/snofly-blog/files/timeline/timeline-making-responsive-3.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -331,7 +331,7 @@ Now, let's move the marker to the timeline. First lets move the marker to be aft
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-making-responsive-4.html"
+  src="/snofly-blog/files/timeline/timeline-making-responsive-4.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
@@ -377,7 +377,7 @@ Now, let's move the marker to the timeline. First lets move the marker to be aft
 <iframe
   width="100%"
   height="280px"
-  src="/files/timeline/timeline-making-responsive-5.html"
+  src="/snofly-blog/files/timeline/timeline-making-responsive-5.html"
   title="A simple timeline using CSS flexbox"
   frameborder="0"
   allowfullscreen="allowfullscreen"
